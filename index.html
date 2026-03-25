@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScoutIQ — Elite Football Intelligence</title>
+<meta name="description" content="ScoutIQ delivers AI-powered football scouting intelligence to professional clubs. Discover undervalued talent before anyone else.">
+<meta name="keywords" content="football scouting, player analytics, talent identification, xG, xA, football intelligence, club scouting">
+<meta property="og:title" content="ScoutIQ — Elite Football Intelligence">
+<meta property="og:description" content="AI-powered scouting intelligence for professional football clubs.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --ink:#06090d;
+  --ink2:#0b1018;
+  --ink3:#101620;
+  --border:#1a2535;
+  --border2:#243348;
+  --gold:#c9a84c;
+  --gold2:#e8c76a;
+  --golddim:rgba(201,168,76,.1);
+  --golddim2:rgba(201,168,76,.18);
+  --white:#f0f4f8;
+  --white2:#b8c8d8;
+  --white3:#6a7f94;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Montserrat",sans-serif;
+  --mono:"JetBrains Mono",monospace;
+}
+body{background:var(--ink);color:var(--white);font-family:var(--sans);overflow-x:hidden;cursor:none}
+
+/* custom cursor */
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s ease;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;transition:all .25s ease}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;
+  padding:0 clamp(24px,5vw,80px);
+  height:72px;
+  background:rgba(6,9,13,.7);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(201,168,76,.08);
+}
+.nav-logo{
+  font-family:var(--serif);
+  font-size:26px;
+  font-weight:700;
+  letter-spacing:4px;
+  color:var(--white);
+  text-decoration:none;
+  text-transform:uppercase;
+}
+.nav-logo sup{
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:2px;
+  color:var(--gold);
+  vertical-align:super;
+  font-weight:400;
+}
+.nav-links{
+  display:flex;align-items:center;gap:40px;
+  margin-left:auto;
+  list-style:none;
+}
+.nav-links a{
+  font-family:var(--mono);
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--white3);text-decoration:none;
+  transition:color .2s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;
+  background:var(--gold);transition:width .3s;
+}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  border:1px solid var(--gold);color:var(--gold) !important;
+  padding:10px 24px;border-radius:2px;
+  transition:all .25s !important;
+}
+.nav-cta::after{display:none !important;}
+.nav-cta:hover{background:var(--gold) !important;color:var(--ink) !important;box-shadow:0 0 30px rgba(201,168,76,.3);}
+
+/* HERO */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+}
+.hero-bg img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center 25%;
+  filter:brightness(.55) contrast(1.1) saturate(1.2);
+}
+/* cinematic vignette */
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(6,9,13,.6) 100%),
+    linear-gradient(to right, rgba(6,9,13,.85) 0%, rgba(6,9,13,.15) 55%, rgba(6,9,13,.05) 100%),
+    linear-gradient(to top, rgba(6,9,13,1) 0%, rgba(6,9,13,.4) 40%, transparent 70%);
+}
+/* gold light leak */
+.hero-bg::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:radial-gradient(ellipse at 70% 40%, rgba(201,168,76,.06) 0%, transparent 60%);
+}
+
+.hero-inner{
+  position:relative;z-index:2;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:flex-end;
+  gap:60px;
+  padding:0 clamp(24px,6vw,100px) clamp(60px,8vh,120px);
+}
+
+.hero-left{}
+
+.hero-kicker{
+  font-family:var(--mono);
+  font-size:10px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:28px;
+  display:flex;align-items:center;gap:16px;
+  opacity:0;animation:fadeUp .9s .1s forwards;
+}
+.hero-kicker::before{content:'';width:40px;height:1px;background:var(--gold);}
+
+.hero-h1{
+  font-family:var(--serif);
+  font-size:clamp(64px,9vw,130px);
+  font-weight:700;
+  line-height:.88;
+  letter-spacing:-1px;
+  color:#fff;
+  margin-bottom:36px;
+  opacity:0;animation:fadeUp .9s .25s forwards;
+}
+.hero-h1 em{
+  font-style:italic;
+  color:var(--gold);
+  display:block;
+}
+
+.hero-tagline{
+  font-family:var(--sans);
+  font-size:clamp(13px,1.4vw,16px);
+  font-weight:300;
+  letter-spacing:1px;
+  color:var(--white2);
+  max-width:440px;
+  line-height:1.8;
+  margin-bottom:52px;
+  opacity:0;animation:fadeUp .9s .4s forwards;
+}
+
+.hero-actions{
+  display:flex;gap:18px;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .9s .55s forwards;
+}
+
+.btn-primary{
+  font-family:var(--sans);font-size:11px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  background:var(--gold);color:var(--ink);
+  padding:18px 44px;border:none;border-radius:2px;
+  text-decoration:none;
+  transition:all .25s;
+  box-shadow:0 8px 40px rgba(201,168,76,.25);
+}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 50px rgba(201,168,76,.4);}
+
+.btn-outline{
+  font-family:var(--sans);font-size:11px;font-weight:600;
+  letter-spacing:4px;text-transform:uppercase;
+  background:transparent;color:var(--white);
+  padding:17px 44px;
+  border:1px solid rgba(240,244,248,.2);border-radius:2px;
+  text-decoration:none;
+  transition:all .25s;
+}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+
+/* hero right: floating stat pills */
+.hero-right{
+  display:flex;flex-direction:column;gap:12px;
+  opacity:0;animation:fadeLeft .9s .7s forwards;
+  min-width:160px;
+}
+.stat-pill{
+  background:rgba(11,16,24,.75);
+  border:1px solid rgba(201,168,76,.18);
+  backdrop-filter:blur(12px);
+  border-radius:4px;
+  padding:16px 22px;
+  text-align:right;
+}
+.stat-pill-val{
+  font-family:var(--serif);
+  font-size:32px;font-weight:700;
+  color:var(--gold);line-height:1;
+}
+.stat-pill-label{
+  font-family:var(--mono);
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--white3);margin-top:4px;
+}
+
+/* DIVIDER */
+.divider{
+  display:flex;align-items:center;gap:24px;
+  padding:0 clamp(24px,6vw,100px);
+  margin:0;
+  height:64px;
+  background:var(--ink2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.divider-item{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--white3);
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+}
+.divider-item em{color:var(--gold);font-style:normal;}
+.divider-sep{width:1px;height:24px;background:var(--border2);flex-shrink:0;}
+
+/* SERVICES section */
+#services{background:var(--ink2);padding:0;}
+.services-inner{
+  max-width:1280px;margin:0 auto;
+  padding:clamp(80px,10vh,140px) clamp(24px,6vw,100px);
+}
+.section-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+}
+.section-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);}
+
+.section-h2{
+  font-family:var(--serif);
+  font-size:clamp(40px,5vw,72px);
+  font-weight:600;line-height:.95;
+  letter-spacing:-0.5px;color:#fff;
+  margin-bottom:16px;
+}
+.section-h2 em{font-style:italic;color:var(--gold);}
+.section-sub{
+  font-family:var(--sans);font-size:15px;font-weight:300;
+  color:var(--white3);line-height:1.8;max-width:460px;
+  margin-bottom:72px;
+}
+
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+}
+.service-card{
+  background:var(--ink3);
+  padding:52px 40px;
+  position:relative;
+  overflow:hidden;
+  transition:background .3s;
+}
+.service-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.service-card:hover{background:#0d1520;}
+.service-card:hover::before{opacity:1;}
+
+.service-num{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  color:var(--white3);margin-bottom:36px;
+  display:flex;align-items:center;gap:12px;
+}
+.service-num::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.service-icon{font-size:32px;margin-bottom:20px;display:block;}
+
+.service-title{
+  font-family:var(--serif);font-size:26px;font-weight:600;
+  letter-spacing:.5px;color:#fff;
+  margin-bottom:14px;line-height:1.1;
+}
+.service-desc{
+  font-family:var(--sans);font-size:13px;font-weight:300;
+  color:var(--white3);line-height:1.75;
+}
+
+/* PHOTO SECTION */
+#showcase{background:var(--ink);overflow:hidden;}
+.showcase-inner{
+  max-width:1280px;margin:0 auto;
+  padding:clamp(80px,10vh,140px) clamp(24px,6vw,100px);
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+.showcase-img-wrap{
+  position:relative;
+}
+.showcase-img-frame{
+  position:relative;overflow:hidden;border-radius:4px;
+}
+.showcase-img-frame img{
+  width:100%;aspect-ratio:4/3;object-fit:cover;
+  filter:brightness(.9) contrast(1.1) saturate(1.15);
+  transition:transform .6s ease;
+}
+.showcase-img-wrap:hover .showcase-img-frame img{transform:scale(1.04);}
+/* gold corner accents */
+.showcase-img-wrap::before{
+  content:'';position:absolute;top:-12px;left:-12px;
+  width:60px;height:60px;
+  border-top:2px solid var(--gold);
+  border-left:2px solid var(--gold);
+  z-index:2;
+}
+.showcase-img-wrap::after{
+  content:'';position:absolute;bottom:-12px;right:-12px;
+  width:60px;height:60px;
+  border-bottom:2px solid var(--gold);
+  border-right:2px solid var(--gold);
+  z-index:2;
+}
+
+.showcase-text{}
+.showcase-quote{
+  font-family:var(--serif);
+  font-size:clamp(28px,3.5vw,46px);
+  font-style:italic;
+  font-weight:300;
+  line-height:1.25;
+  color:#fff;
+  margin-bottom:32px;
+  position:relative;
+  padding-left:28px;
+}
+.showcase-quote::before{
+  content:'C';
+  font-size:100px;
+  color:var(--gold);
+  opacity:.25;
+  position:absolute;
+  top:-20px;left:-10px;
+  font-family:var(--serif);
+  line-height:1;
+}
+.showcase-body{
+  font-family:var(--sans);font-size:15px;font-weight:300;
+  color:var(--white3);line-height:1.8;margin-bottom:44px;
+}
+.metrics-row{
+  display:flex;gap:40px;flex-wrap:wrap;
+  border-top:1px solid var(--border);
+  padding-top:32px;
+}
+.metric-item{}
+.metric-val{
+  font-family:var(--serif);font-size:44px;font-weight:700;
+  color:var(--gold);line-height:1;letter-spacing:-1px;
+}
+.metric-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--white3);margin-top:6px;
+}
+
+/* WHAT WE DELIVER */
+#deliver{background:var(--ink2);}
+.deliver-inner{
+  max-width:1280px;margin:0 auto;
+  padding:clamp(80px,10vh,140px) clamp(24px,6vw,100px);
+}
+.deliver-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;margin-top:64px;
+}
+.deliver-card{
+  background:var(--ink3);padding:44px 32px;
+  border-bottom:2px solid transparent;
+  transition:all .3s;
+  position:relative;
+}
+.deliver-card:hover{border-bottom-color:var(--gold);background:#0d1520;}
+.deliver-card-num{
+  font-family:var(--mono);font-size:48px;font-weight:300;
+  color:rgba(201,168,76,.12);
+  line-height:1;margin-bottom:20px;
+  letter-spacing:-2px;
+}
+.deliver-card-title{
+  font-family:var(--serif);font-size:22px;font-weight:600;
+  color:#fff;margin-bottom:12px;
+}
+.deliver-card-desc{
+  font-family:var(--sans);font-size:13px;font-weight:300;
+  color:var(--white3);line-height:1.7;
+}
+
+/* CTA */
+#cta{
+  background:var(--ink);
+  border-top:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+#cta::before{
+  content:'';position:absolute;
+  top:-200px;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(201,168,76,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-inner{
+  max-width:860px;margin:0 auto;text-align:center;
+  padding:clamp(100px,14vh,160px) clamp(24px,6vw,100px);
+  position:relative;z-index:1;
+}
+.cta-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:5px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:24px;
+}
+.cta-h2{
+  font-family:var(--serif);
+  font-size:clamp(44px,6vw,90px);
+  font-weight:700;line-height:.92;
+  color:#fff;margin-bottom:24px;letter-spacing:-1px;
+}
+.cta-h2 em{font-style:italic;color:var(--gold);}
+.cta-sub{
+  font-family:var(--sans);font-size:15px;font-weight:300;
+  color:var(--white3);line-height:1.8;margin-bottom:52px;
+}
+.cta-actions{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+
+/* FOOTER */
+footer{
+  background:var(--ink2);
+  border-top:1px solid var(--border);
+  padding:36px clamp(24px,5vw,80px);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.footer-logo{
+  font-family:var(--serif);font-size:20px;font-weight:700;
+  letter-spacing:4px;color:var(--white3);text-transform:uppercase;
+}
+.footer-logo sup{
+  font-family:var(--mono);font-size:8px;color:var(--gold);vertical-align:super;
+}
+.footer-copy{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:1.5px;color:var(--white3);
+}
+.footer-right{
+  display:flex;gap:28px;
+}
+.footer-right a{
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--white3);text-decoration:none;transition:color .2s;
+}
+.footer-right a:hover{color:var(--gold);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:none}
+}
+@keyframes fadeLeft{
+  from{opacity:0;transform:translateX(28px)}
+  to{opacity:1;transform:none}
+}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .75s ease,transform .75s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .services-grid{grid-template-columns:1fr 1fr;}
+  .deliver-grid{grid-template-columns:1fr 1fr;}
+  .showcase-inner{grid-template-columns:1fr;gap:48px;}
+  .hero-right{display:none;}
+}
+@media(max-width:700px){
+  .nav-links{display:none;}
+  .services-grid{grid-template-columns:1fr;}
+  .deliver-grid{grid-template-columns:1fr 1fr;}
+  .divider{gap:16px;overflow-x:auto;}
+  .hero-h1{font-size:54px;}
+}
+
+/* ══ LANG SWITCHER ═══════════════════════════════════════════════════════════ */
+.lang-switcher {
+  position: relative;
+  margin-left: 8px;
+}
+.lang-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(201,168,76,.25);
+  border-radius: 4px;
+  color: var(--white2);
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.lang-btn:hover { border-color: var(--gold); color: var(--gold); }
+.lang-flag { font-size: 14px; }
+.lang-arrow { font-size: 8px; opacity:.6; transition: transform .2s; }
+.lang-dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--ink2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  min-width: 180px;
+  z-index: 300;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,.6);
+}
+.lang-switcher.open .lang-dropdown { display: block; }
+.lang-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+  color: var(--white3);
+  cursor: pointer;
+  transition: all .15s;
+  border: none; background: none; width: 100%; text-align: left;
+}
+.lang-option:hover { background: var(--ink3); color: var(--gold); }
+.lang-option.active { color: var(--gold); }
+
+/* ══ CONTACT FORM SECTION ════════════════════════════════════════════════════ */
+#contact {
+  background: var(--ink2);
+  border-top: 1px solid var(--border);
+}
+.contact-inner {
+  max-width: 1180px; margin: 0 auto;
+  padding: clamp(80px,10vh,120px) clamp(24px,6vw,100px);
+}
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 60px;
+}
+.contact-info {}
+.contact-info-title {
+  font-family: var(--serif);
+  font-size: clamp(32px,4vw,52px);
+  font-weight: 700;
+  line-height: .95;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.contact-info-title em { font-style: italic; color: var(--gold); }
+.contact-info-sub {
+  font-family: var(--sans); font-size: 15px; font-weight: 300;
+  color: var(--white3); line-height: 1.8;
+  margin-bottom: 44px;
+}
+.contact-detail {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.contact-detail-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--white2); letter-spacing: .5px;
+}
+.contact-detail-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--golddim);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.contact-detail-text {}
+.contact-detail-label {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--white3); margin-bottom: 3px;
+}
+.contact-detail-val { color: var(--white); }
+
+/* Form card */
+.contact-form-card {
+  background: rgba(6,9,13,.7);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: clamp(28px,4vw,48px);
+  backdrop-filter: blur(16px);
+}
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-row { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+.form-row:last-child { margin-bottom: 0; }
+.form-label {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--white3);
+}
+.form-label span { color: var(--gold); margin-left: 3px; }
+.form-input, .form-select, .form-textarea {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 4px;
+  color: var(--white);
+  font-family: var(--sans); font-size: 14px;
+  padding: 13px 16px;
+  outline: none; width: 100%;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+  appearance: none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--white3); }
+.form-input:hover, .form-select:hover, .form-textarea:hover {
+  border-color: rgba(201,168,76,.2);
+  background: rgba(255,255,255,.04);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: rgba(201,168,76,.5);
+  background: rgba(255,255,255,.04);
+  box-shadow: 0 0 0 3px rgba(201,168,76,.08);
+}
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.form-select option { background: #101820; }
+.form-textarea { min-height: 130px; resize: vertical; }
+.form-divider { height: 1px; background: var(--border); margin: 20px 0; }
+.form-submit {
+  width: 100%; padding: 17px;
+  background: var(--gold); color: var(--ink);
+  border: none; border-radius: 4px;
+  font-family: var(--sans); font-size: 12px; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+  cursor: pointer;
+  transition: all .25s;
+  box-shadow: 0 4px 30px rgba(201,168,76,.2);
+  margin-top: 8px;
+}
+.form-submit:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 40px rgba(201,168,76,.35); }
+.form-submit:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.form-status {
+  text-align: center; margin-top: 14px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--white3); letter-spacing: .5px;
+}
+.form-status.success { color: #6ee7b7; }
+.form-status.error { color: #fca5a5; }
+
+/* Arabic RTL */
+html[lang="ar"] { direction: rtl; }
+html[lang="ar"] .nav-logo { order: 2; }
+html[lang="ar"] .nav-links { margin-left: 0; margin-right: auto; }
+html[lang="ar"] .lang-dropdown { right: auto; left: 0; }
+html[lang="ar"] .hero-inner { direction: rtl; }
+html[lang="ar"] .contact-layout { direction: rtl; }
+
+/* lang specific fonts */
+html[lang="ar"] body, html[lang="ar"] input, html[lang="ar"] textarea,
+html[lang="ar"] select, html[lang="ar"] button {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+}
+
+@media(max-width:860px){
+  .contact-layout { grid-template-columns: 1fr; gap:40px; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+}
+
+
+/* ── Sample Report button ───────────────────────────────────────── */
+.btn-sample{
+  font-family:var(--sans);font-size:11px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  background:transparent;
+  color:var(--white);
+  padding:16px 32px;
+  border:1px solid rgba(240,244,248,.25);
+  border-radius:2px;
+  text-decoration:none;
+  transition:all .25s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-sample::before{content:'📄';font-size:13px;}
+.btn-sample:hover{
+  border-color:var(--gold);color:var(--gold);
+  box-shadow:0 0 20px rgba(201,168,76,.15);
+}
+
+/* ── Consent checkboxes ──────────────────────────────────────────── */
+.form-consent{
+  display:flex;flex-direction:column;gap:14px;
+  margin-bottom:20px;
+}
+.consent-label{
+  display:flex;align-items:flex-start;gap:12px;
+  cursor:pointer;
+}
+.consent-checkbox{
+  position:absolute;opacity:0;width:0;height:0;
+}
+.consent-check-custom{
+  flex-shrink:0;
+  width:18px;height:18px;
+  border:1px solid var(--border2);
+  border-radius:3px;
+  background:var(--ink2);
+  margin-top:1px;
+  transition:all .2s;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.consent-checkbox:checked + .consent-check-custom{
+  background:var(--gold);
+  border-color:var(--gold);
+}
+.consent-checkbox:checked + .consent-check-custom::after{
+  content:'';
+  position:absolute;
+  width:5px;height:9px;
+  border:2px solid var(--ink);
+  border-top:none;border-left:none;
+  transform:rotate(45deg) translate(-1px,-1px);
+}
+.consent-text{
+  font-family:var(--mono);font-size:10px;letter-spacing:.5px;
+  color:var(--white2);line-height:1.6;
+}
+.consent-text a{
+  color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,168,76,.3);
+  transition:border-color .2s;
+}
+.consent-text a:hover{border-color:var(--gold);}
+.consent-label:hover .consent-check-custom{border-color:var(--gold);}
+
+/* ── Brighter body text ──────────────────────────────────────────── */
+.section-sub{color:var(--white2) !important;}
+.service-desc{color:var(--white2) !important;}
+.showcase-body{color:var(--white2) !important;}
+.deliver-card-desc{color:var(--white2) !important;}
+.hero-tagline{color:var(--white2) !important;}
+.contact-info-sub{color:var(--white2) !important;}
+.contact-detail-val{color:var(--white2) !important;}
+.cta-sub{color:var(--white2) !important;}
+.metric-label{color:var(--white2) !important;}
+.stat-pill-label{color:var(--white2) !important;}
+.deliver-card-num{color:var(--white2) !important;}
+.form-label{color:var(--white2) !important;}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ScoutIQ<sup>™</sup></a>
+  <ul class="nav-links">
+    <li><a href="#services" data-i18n="nav_services">Services</a></li>
+    <li><a href="#showcase" data-i18n="nav_intelligence">Intelligence</a></li>
+    <li><a href="#deliver" data-i18n="nav_deliverables">Deliverables</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li><li><a href="#contact" class="nav-cta" data-i18n="nav_cta">Request a Report</a></li>
+  </ul>
+
+  <div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn" id="langBtn" onclick="toggleLangMenu()" aria-expanded="false">
+      <span class="lang-flag" id="currentFlag">🇬🇧</span>
+      <span id="currentLangCode">EN</span>
+      <span class="lang-arrow">▼</span>
+    </button>
+    <div class="lang-dropdown" id="langDropdown" role="listbox">
+      <button data-lang="en" class="lang-option active" onclick="setLang('en')"  role="option">🇬🇧 English</button>
+      <button data-lang="fr" class="lang-option" onclick="setLang('fr')"  role="option">🇫🇷 Français</button>
+      <button data-lang="pt" class="lang-option" onclick="setLang('pt')"  role="option">🇵🇹 Português</button>
+      <button data-lang="it" class="lang-option" onclick="setLang('it')"  role="option">🇮🇹 Italiano</button>
+      <button data-lang="nl" class="lang-option" onclick="setLang('nl')"  role="option">🇳🇱 Nederlands</button>
+      <button data-lang="es" class="lang-option" onclick="setLang('es')"  role="option">🇪🇸 Español</button>
+      <button data-lang="ar" class="lang-option" onclick="setLang('ar')"  role="option">🇦🇪 العربية</button>
+      <button data-lang="ru" class="lang-option" onclick="setLang('ru')"  role="option">🇷🇺 Русский</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-label="Hero — ScoutIQ Football Intelligence">
+  <div class="hero-bg">
+    <img src="hero-bg.jpg" alt="Professional football match at stadium" loading="eager">
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <p class="hero-kicker" data-i18n="hero_eyebrow">Elite Football Intelligence</p>
+      <h1 class="hero-h1"><span data-i18n="hero_h1_1">See talent</span><br><em data-i18n="hero_h1_2">others miss.</em></h1>
+      <p class="hero-tagline" data-i18n="hero_tagline">ScoutIQ delivers AI-powered football scouting intelligence directly to your club — identifying undervalued players through advanced xG, xA, and per-90 data analysis before competitors discover them. Make smarter signings, faster.</p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-primary" data-i18n="btn_primary">Request a Scouting Report</a>
+        <a href="#services" class="btn-outline" data-i18n="btn_outline">Our Services</a>
+        <a href="https://github.com/scoutiq/sample-report" target="_blank" rel="noopener" class="btn-sample" data-i18n="btn_sample">Sample Report</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="stat-pill">
+        <div class="stat-pill-val">xG</div>
+        <div class="stat-pill-label">Expected Goals</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val">p90</div>
+        <div class="stat-pill-label">Normalised Data</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-val">PDF</div>
+        <div class="stat-pill-label">Full Reports</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="divider" role="marquee" aria-label="Key capabilities">
+  <div class="divider-item"><em>xG & xA Analytics</em></div>
+  <div class="divider-sep"></div>
+  <div class="divider-item"><em>Undervalue Scoring</em></div>
+  <div class="divider-sep"></div>
+  <div class="divider-item"><em>Per-90 Normalisation</em></div>
+  <div class="divider-sep"></div>
+  <div class="divider-item"><em>Market Intelligence</em></div>
+  <div class="divider-sep"></div>
+  <div class="divider-item"><em>Position Benchmarking</em></div>
+  <div class="divider-sep"></div>
+  <div class="divider-item"><em>PDF Reports</em></div>
+  <div class="divider-sep"></div>
+  <div class="divider-item"><em>CSV Data Export</em></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-inner">
+    <p class="section-eyebrow reveal" data-i18n="svc_eyebrow">What We Do</p>
+    <h2 class="section-h2 reveal"><span data-i18n="svc_h2_1">Intelligence</span><br><em data-i18n="svc_h2_2">at every level.</em></h2>
+    <p class="section-sub reveal" data-i18n="svc_sub">From emerging talents to established players, we provide clubs with the data-driven edge needed to make confident signings.</p>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <span class="service-icon">🎯</span>
+        <div class="service-title" data-i18n="svc1_title">Talent Identification</div>
+        <p class="service-desc" data-i18n="svc1_desc">We surface players whose statistical output significantly outperforms their market valuation — finding tomorrow's stars at today's prices.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <span class="service-icon">📊</span>
+        <div class="service-title" data-i18n="svc2_title">Advanced Analytics</div>
+        <p class="service-desc" data-i18n="svc2_desc">Deep performance analysis across xG, xA, progressive actions, defensive metrics and more — all benchmarked against positional averages.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <span class="service-icon">🏆</span>
+        <div class="service-title" data-i18n="svc3_title">Club-Ready Reports</div>
+        <p class="service-desc" data-i18n="svc3_desc">Professionally formatted PDF scouting reports and complete data exports, tailored to your club's specific position and budget requirements.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE with embedded photo -->
+<section id="showcase">
+  <div class="showcase-inner">
+    <div class="showcase-img-wrap reveal">
+      <div class="showcase-img-frame">
+        <img src="showcase-bg.jpg" alt="Football match — identifying undervalued talent in action">
+      </div>
+    </div>
+    <div class="showcase-text reveal">
+      <p class="section-eyebrow" data-i18n="shw_eyebrow">Our Intelligence</p>
+      <blockquote class="showcase-quote" data-i18n="shw_quote">The market price tells you what a player costs. We tell you what a player is worth.</blockquote>
+      <p class="showcase-body" data-i18n="shw_body">Our proprietary AI scoring engine analyses 20+ data points per player — including xG, xA, progressive passes, carries and defensive metrics — normalises performance across playing time and competition level, and delivers a clear ranking of the most undervalued football players in any position. Your club acts on intelligence before the market reacts.</p>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-val">20<span style="font-size:24px;opacity:.6">+</span></div>
+          <div class="metric-label" data-i18n="shw_m1_label">Metrics per player</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-val">p90</div>
+          <div class="metric-label" data-i18n="shw_m2_label">Fair comparison</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-val">48h</div>
+          <div class="metric-label" data-i18n="shw_m3_label">Report turnaround</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section id="deliver">
+  <div class="deliver-inner">
+    <p class="section-eyebrow reveal" data-i18n="dlv_eyebrow">Deliverables</p>
+    <h2 class="section-h2 reveal"><span data-i18n="dlv_h2_1">What your club</span><br><em data-i18n="dlv_h2_2">receives.</em></h2>
+    <p class="section-sub reveal" data-i18n="dlv_sub">Every report is built around your exact criteria — position, age range, budget, and target leagues.</p>
+
+    <div class="deliver-grid">
+      <div class="deliver-card reveal">
+        <div class="deliver-card-num">01</div>
+        <div class="deliver-card-title" data-i18n="dlv1_title">Ranked Shortlist</div>
+        <p class="deliver-card-desc" data-i18n="dlv1_desc">Top candidates ranked by our undervalue score — combining raw performance with market efficiency.</p>
+      </div>
+      <div class="deliver-card reveal">
+        <div class="deliver-card-num">02</div>
+        <div class="deliver-card-title" data-i18n="dlv2_title">Player Profiles</div>
+        <p class="deliver-card-desc" data-i18n="dlv2_desc">Individual breakdowns of key statistics, positional benchmarks, and an AI-generated scouting summary.</p>
+      </div>
+      <div class="deliver-card reveal">
+        <div class="deliver-card-num">03</div>
+        <div class="deliver-card-title" data-i18n="dlv3_title">PDF Report</div>
+        <p class="deliver-card-desc" data-i18n="dlv3_desc">A polished, presentation-ready document your sporting director can use immediately.</p>
+      </div>
+      <div class="deliver-card reveal">
+        <div class="deliver-card-num">04</div>
+        <div class="deliver-card-title" data-i18n="dlv4_title">Raw Data Export</div>
+        <p class="deliver-card-desc" data-i18n="dlv4_desc">Full CSV dataset for clubs that want to run further internal analysis or integrate into their own systems.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <p class="cta-eyebrow reveal" data-i18n="cta_eyebrow">Get Started</p>
+    <h2 class="cta-h2 reveal"><span data-i18n="cta_h2_1">Ready to find your</span><br><em data-i18n="cta_h2_2">next signing?</em></h2>
+    <p class="cta-sub reveal" data-i18n="cta_sub">Tell us your position, budget and target leagues.
+We handle everything else.</p>
+    <div class="cta-actions reveal">
+      <a href="mailto:scout@scoutiq.io" class="btn-primary" data-i18n="cta_btn1">Request a Scouting Report</a>
+      <a href="#services" class="btn-outline" data-i18n="cta_btn2">Learn More</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CONTACT FORM ════════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="contact-inner">
+    <p class="section-eyebrow reveal" data-i18n="con_eyebrow">Get In Touch</p>
+    <h2 class="section-h2 reveal" data-i18n="con_h2">Request a<br><em>Scouting Report</em></h2>
+
+    <div class="contact-layout">
+      <!-- Left: info -->
+      <div class="contact-info reveal">
+        <p class="contact-info-sub" data-i18n="con_sub">
+          Tell us your position requirements, budget range and target leagues.
+          We'll handle the analysis and deliver a full scouting report.
+        </p>
+        <div class="contact-detail">
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">📋</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label" data-i18n="con_d1_label">What to include</div>
+              <div class="contact-detail-val" data-i18n="con_d1_val">Target position, age range, max budget, preferred leagues</div>
+            </div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">⏱</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label" data-i18n="con_d2_label">Turnaround</div>
+              <div class="contact-detail-val" data-i18n="con_d2_val">Reports delivered within 48 hours</div>
+            </div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">🔒</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label" data-i18n="con_d3_label">Confidential</div>
+              <div class="contact-detail-val" data-i18n="con_d3_val">All requests handled with full discretion</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="contact-form-card reveal">
+        <form id="contactForm" novalidate>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label class="form-label" for="f-name" data-i18n="lbl_name">Full Name <span>*</span></label>
+              <input class="form-input" id="f-name" name="name" type="text" required
+                     data-i18n-ph="ph_name" placeholder="Your name">
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="f-club" data-i18n="lbl_club">Club / Organisation <span>*</span></label>
+              <input class="form-input" id="f-club" name="club" type="text" required
+                     data-i18n-ph="ph_club" placeholder="FC Barcelona">
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="f-email" data-i18n="lbl_email">Email <span>*</span></label>
+              <input class="form-input" id="f-email" name="email" type="email" required
+                     data-i18n-ph="ph_email" placeholder="you@club.com">
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="f-phone" data-i18n="lbl_phone">Phone</label>
+              <input class="form-input" id="f-phone" name="phone" type="tel"
+                     data-i18n-ph="ph_phone" placeholder="+1 555 000 0000">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="f-position" data-i18n="lbl_position">Target Position <span>*</span></label>
+            <select class="form-select" id="f-position" name="position" required>
+              <option value="" data-i18n-opt="pos_any">Any position</option>
+              <option value="GK" data-i18n-opt="pos_gk">Goalkeeper (GK)</option>
+              <option value="CB" data-i18n-opt="pos_cb">Centre-Back (CB)</option>
+              <option value="LB" data-i18n-opt="pos_lb">Left-Back (LB)</option>
+              <option value="RB" data-i18n-opt="pos_rb">Right-Back (RB)</option>
+              <option value="CDM" data-i18n-opt="pos_cdm">Defensive Mid (CDM)</option>
+              <option value="CM" data-i18n-opt="pos_cm">Central Mid (CM)</option>
+              <option value="CAM" data-i18n-opt="pos_cam">Attacking Mid (CAM)</option>
+              <option value="LW" data-i18n-opt="pos_lw">Left Wing (LW)</option>
+              <option value="RW" data-i18n-opt="pos_rw">Right Wing (RW)</option>
+              <option value="ST" data-i18n-opt="pos_st">Striker (ST)</option>
+            </select>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label class="form-label" for="f-budget" data-i18n="lbl_budget">Max Budget (€)</label>
+              <input class="form-input" id="f-budget" name="budget" type="text"
+                     data-i18n-ph="ph_budget" placeholder="e.g. 5,000,000">
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="f-leagues" data-i18n="lbl_leagues">Target Leagues</label>
+              <input class="form-input" id="f-leagues" name="leagues" type="text"
+                     data-i18n-ph="ph_leagues" placeholder="e.g. La Liga, Serie A">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="f-message" data-i18n="lbl_message">Additional Requirements</label>
+            <textarea class="form-textarea" id="f-message" name="message" rows="4"
+                      data-i18n-ph="ph_message"
+                      placeholder="Age range, nationality preferences, playing style, injury history considerations..."></textarea>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div class="form-consent">
+            <label class="consent-label">
+              <input type="checkbox" id="consent-terms" class="consent-checkbox">
+              <span class="consent-check-custom"></span>
+              <span class="consent-text" data-i18n="consent_terms">I agree to the <a href="https://example.com/terms" target="_blank" data-i18n="footer_terms">Terms &amp; Conditions</a></span>
+            </label>
+            <label class="consent-label">
+              <input type="checkbox" id="consent-privacy" class="consent-checkbox">
+              <span class="consent-check-custom"></span>
+              <span class="consent-text" data-i18n="consent_privacy">I have read and accept the <a href="https://example.com/privacy" target="_blank" data-i18n="footer_privacy">Privacy Policy</a></span>
+            </label>
+          </div>
+
+          <button class="form-submit" id="contactSubmit" type="submit" data-i18n="btn_send">
+            Send Request
+          </button>
+          <div class="form-status" id="formStatus"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ScoutIQ<sup>™</sup></div>
+  <div class="footer-copy" data-i18n="footer_copy">© 2025 ScoutIQ · Elite Football Intelligence · All rights reserved</div>
+  <div class="footer-right">
+    <a href="https://example.com/privacy" target="_blank" data-i18n="footer_privacy">Privacy Policy</a>
+    <a href="https://example.com/terms" target="_blank" data-i18n="footer_terms">Terms &amp; Conditions</a>
+    <a href="#contact" data-i18n="nav_contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=(mx-4)+'px'; cursor.style.top=(my-4)+'px'; });
+(function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=(rx-18)+'px'; ring.style.top=(ry-18)+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.transform='scale(1.8)';ring.style.borderColor='rgba(201,168,76,.7)';});
+  el.addEventListener('mouseleave',()=>{ring.style.transform='scale(1)';ring.style.borderColor='rgba(201,168,76,.4)';});
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+  });
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach((el,i)=>{
+  el.style.transitionDelay=(i%4*0.1)+'s';
+  obs.observe(el);
+});
+
+// Nav active
+const sects=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sects.forEach(s=>{if(window.scrollY>=s.offsetTop-90)cur=s.id;});
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a=>{
+    a.style.color=a.getAttribute('href')==='#'+cur?'var(--gold)':'';
+  });
+},{passive:true});
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  SCOUTIQ — Translation Engine v3 (full rewrite)
+//  EN / FR / PT / IT / NL / ES / AR / RU
+// ═══════════════════════════════════════════════════════════════════
+
+const T = {
+
+  en: {
+    _flag:"🇬🇧", _code:"EN", _dir:"ltr",
+    nav_services:"Services", nav_intelligence:"Intelligence",
+    nav_deliverables:"Deliverables",
+    nav_contact:"Contact", nav_cta:"Request a Report",
+    hero_eyebrow:"Elite Football Intelligence",
+    hero_h1_1:"See talent", hero_h1_2:"others miss.",
+    hero_tagline:"ScoutIQ delivers AI-powered football scouting intelligence directly to your club — identifying undervalued players through advanced xG, xA, and per-90 data analysis before competitors discover them. Make smarter signings, faster.",
+    btn_primary:"Request a Scouting Report", btn_outline:"Our Services",
+    btn_sample:"Sample Report",
+    svc_eyebrow:"What We Do",
+    svc_h2_1:"Intelligence", svc_h2_2:"at every level.",
+    svc_sub:"From emerging talents to established players, we provide clubs with the data-driven edge needed to make confident signings.",
+    svc1_title:"Talent Identification",
+    svc1_desc:"We surface players whose statistical output significantly outperforms their market valuation — finding tomorrow's stars at today's prices.",
+    svc2_title:"Advanced Analytics",
+    svc2_desc:"Deep performance analysis across xG, xA, progressive actions, defensive metrics and more — all benchmarked against positional averages.",
+    svc3_title:"Club-Ready Reports",
+    svc3_desc:"Professionally formatted PDF scouting reports and complete data exports, tailored to your club's specific position and budget requirements.",
+    shw_eyebrow:"Our Intelligence",
+    shw_quote:"The market price tells you what a player costs. We tell you what a player is worth.",
+    shw_body:"Our proprietary AI scoring engine analyses 20+ data points per player — including xG, xA, progressive passes, carries and defensive metrics — normalises performance across playing time and competition level, and delivers a clear ranking of the most undervalued football players in any position. Your club acts on intelligence before the market reacts.",
+    shw_m1_label:"Metrics per player",
+    shw_m2_label:"Fair comparison",
+    shw_m3_label:"Report turnaround",
+    dlv_eyebrow:"Deliverables",
+    dlv_h2_1:"What your club", dlv_h2_2:"receives.",
+    dlv_sub:"Every report is built around your exact criteria — position, age range, budget, and target leagues.",
+    dlv1_title:"Ranked Shortlist", dlv1_desc:"Top candidates ranked by our undervalue score — combining raw performance with market efficiency.",
+    dlv2_title:"Player Profiles", dlv2_desc:"Individual breakdowns of key statistics, positional benchmarks, and an AI-generated scouting summary.",
+    dlv3_title:"PDF Report", dlv3_desc:"A polished, presentation-ready document your sporting director can use immediately.",
+    dlv4_title:"Raw Data Export", dlv4_desc:"Full CSV dataset for clubs that want to run further internal analysis or integrate into their own systems.",
+    cta_eyebrow:"Get Started",
+    cta_h2_1:"Ready to find your", cta_h2_2:"next signing?",
+    cta_sub:"Tell us your position, budget and target leagues. We handle everything else.",
+    cta_btn1:"Request a Scouting Report", cta_btn2:"Learn More",
+    con_eyebrow:"Get In Touch",
+    con_h2:"Request a<br><em>Scouting Report</em>",
+    con_sub:"Tell us your position requirements, budget range and target leagues. We'll handle the analysis and deliver a full scouting report.",
+    con_d1_label:"What to include", con_d1_val:"Target position, age range, max budget, preferred leagues",
+    con_d2_label:"Turnaround", con_d2_val:"Reports delivered within 48 hours",
+    con_d3_label:"Confidential", con_d3_val:"All requests handled with full discretion",
+    lbl_name:"Full Name", lbl_club:"Club / Organisation", lbl_email:"Email", lbl_phone:"Phone",
+    lbl_position:"Target Position", lbl_budget:"Max Budget (€)",
+    lbl_leagues:"Target Leagues", lbl_message:"Additional Requirements",
+    ph_name:"Your name", ph_club:"FC Barcelona", ph_email:"you@club.com",
+    ph_phone:"+1 555 000 0000", ph_budget:"e.g. 5,000,000",
+    ph_leagues:"e.g. La Liga, Serie A",
+    ph_message:"Age range, nationality preferences, playing style...",
+    pos_any:"Any position", pos_gk:"Goalkeeper (GK)", pos_cb:"Centre-Back (CB)",
+    pos_lb:"Left-Back (LB)", pos_rb:"Right-Back (RB)", pos_cdm:"Defensive Mid (CDM)",
+    pos_cm:"Central Mid (CM)", pos_cam:"Attacking Mid (CAM)",
+    pos_lw:"Left Wing (LW)", pos_rw:"Right Wing (RW)", pos_st:"Striker (ST)",
+    btn_send:"Send Request",
+    footer_copy:"© 2025 ScoutIQ · Elite Football Intelligence · All rights reserved",
+    footer_privacy:"Privacy Policy", footer_terms:"Terms & Conditions",
+    consent_terms:"I agree to the <a href='https://example.com/terms' target='_blank'>Terms &amp; Conditions</a>",
+    consent_privacy:"I have read and accept the <a href='https://example.com/privacy' target='_blank'>Privacy Policy</a>",
+    err_required:"Please fill in all required fields.",
+    err_email:"Please enter a valid email address.",
+    err_consent:"Please accept the Terms & Conditions and Privacy Policy to proceed.",
+    msg_opening:"Opening your email client… Please send the message.",
+  },
+
+  fr: {
+    _flag:"🇫🇷", _code:"FR", _dir:"ltr",
+    nav_services:"Services", nav_intelligence:"Intelligence",
+    nav_deliverables:"Livrables",
+    nav_contact:"Contact", nav_cta:"Demander un rapport",
+    hero_eyebrow:"Renseignement Football Élite",
+    hero_h1_1:"Détectez les talents", hero_h1_2:"que les autres ratent.",
+    hero_tagline:"ScoutIQ livre une intelligence de scouting de précision directement à votre club — révélant les joueurs sous-évalués grâce à une analyse avancée xG, xA et per-90 avant que le marché ne les découvre.",
+    btn_primary:"Demander un rapport de scouting", btn_outline:"Nos services",
+    btn_sample:"Rapport Exemple",
+    svc_eyebrow:"Ce que nous faisons",
+    svc_h2_1:"Intelligence", svc_h2_2:"à tous les niveaux.",
+    svc_sub:"Des jeunes talents aux joueurs confirmés, nous offrons aux clubs l'avantage des données pour des recrutements confiants.",
+    svc1_title:"Identification des talents",
+    svc1_desc:"Nous révélons les joueurs dont les statistiques surpassent largement leur valeur marchande — les stars de demain aux prix d'aujourd'hui.",
+    svc2_title:"Analytique avancée",
+    svc2_desc:"Analyse approfondie xG, xA, actions progressives, métriques défensives — benchmarkées selon la moyenne positionnelle.",
+    svc3_title:"Rapports prêts pour les clubs",
+    svc3_desc:"Rapports PDF de scouting professionnels, adaptés aux critères de position et de budget de votre club.",
+    shw_eyebrow:"Notre intelligence",
+    shw_quote:"Le prix du marché vous dit ce que coûte un joueur. Nous vous disons ce qu'il vaut.",
+    shw_body:"Notre moteur de scoring analyse des milliers de points de données par joueur, normalise les performances et livre un classement clair des joueurs les plus sous-évalués dans chaque position.",
+    shw_m1_label:"Métriques par joueur",
+    shw_m2_label:"Comparaison équitable",
+    shw_m3_label:"Délai de livraison",
+    dlv_eyebrow:"Livrables",
+    dlv_h2_1:"Ce que reçoit", dlv_h2_2:"votre club.",
+    dlv_sub:"Chaque rapport est construit autour de vos critères exacts — position, tranche d'âge, budget et ligues cibles.",
+    dlv1_title:"Shortlist classée", dlv1_desc:"Meilleurs candidats classés par notre score de sous-évaluation.",
+    dlv2_title:"Profils de joueurs", dlv2_desc:"Analyses individuelles, benchmarks positionnels et résumé de scouting généré par IA.",
+    dlv3_title:"Rapport PDF", dlv3_desc:"Document prêt à présenter à votre directeur sportif.",
+    dlv4_title:"Export de données brutes", dlv4_desc:"Dataset CSV complet pour analyses internes supplémentaires.",
+    cta_eyebrow:"Commencer",
+    cta_h2_1:"Prêt à trouver votre", cta_h2_2:"prochaine recrue?",
+    cta_sub:"Indiquez-nous la position, le budget et les ligues cibles. Nous nous occupons du reste.",
+    cta_btn1:"Demander un rapport", cta_btn2:"En savoir plus",
+    con_eyebrow:"Nous contacter",
+    con_h2:"Demander un<br><em>rapport de scouting</em>",
+    con_sub:"Indiquez vos critères de position, votre budget et vos ligues cibles. Nous nous chargeons de l'analyse et livrons le rapport complet.",
+    con_d1_label:"Ce qu'il faut inclure", con_d1_val:"Position cible, tranche d'âge, budget max, ligues souhaitées",
+    con_d2_label:"Délai", con_d2_val:"Rapports livrés en 48 heures",
+    con_d3_label:"Confidentiel", con_d3_val:"Toutes les demandes traitées avec discrétion totale",
+    lbl_name:"Nom complet", lbl_club:"Club / Organisation", lbl_email:"Email", lbl_phone:"Téléphone",
+    lbl_position:"Position cible", lbl_budget:"Budget max (€)",
+    lbl_leagues:"Ligues cibles", lbl_message:"Exigences supplémentaires",
+    ph_name:"Votre nom", ph_club:"FC Barcelone", ph_email:"vous@club.com",
+    ph_phone:"+33 6 00 00 00 00", ph_budget:"ex. 5 000 000",
+    ph_leagues:"ex. Ligue 1, Bundesliga",
+    ph_message:"Tranche d'âge, nationalité, style de jeu...",
+    pos_any:"Toute position", pos_gk:"Gardien (GB)", pos_cb:"Défenseur central (DC)",
+    pos_lb:"Arrière gauche (AG)", pos_rb:"Arrière droit (AD)", pos_cdm:"Milieu défensif (MDf)",
+    pos_cm:"Milieu central (MC)", pos_cam:"Milieu offensif (MOff)",
+    pos_lw:"Ailier gauche (AG)", pos_rw:"Ailier droit (AD)", pos_st:"Attaquant (ATT)",
+    btn_send:"Envoyer la demande",
+    footer_copy:"© 2025 ScoutIQ · Intelligence Football Élite · Tous droits réservés",
+    footer_privacy:"Politique de Confidentialité", footer_terms:"Conditions Générales",
+    consent_terms:"J'accepte les <a href='https://example.com/terms' target='_blank'>Conditions Générales</a>",
+    consent_privacy:"J'ai lu et j'accepte la <a href='https://example.com/privacy' target='_blank'>Politique de Confidentialité</a>",
+    err_required:"Veuillez remplir tous les champs obligatoires.",
+    err_email:"Veuillez saisir une adresse e-mail valide.",
+    err_consent:"Veuillez accepter les Conditions Générales et la Politique de Confidentialité.",
+    msg_opening:"Ouverture de votre client e-mail… Veuillez envoyer le message.",
+  },
+
+  pt: {
+    _flag:"🇵🇹", _code:"PT", _dir:"ltr",
+    nav_services:"Serviços", nav_intelligence:"Inteligência",
+    nav_deliverables:"Entregas",
+    nav_contact:"Contacto", nav_cta:"Solicitar relatório",
+    hero_eyebrow:"Inteligência Futebolística de Elite",
+    hero_h1_1:"Descubra talentos", hero_h1_2:"que os outros perdem.",
+    hero_tagline:"ScoutIQ entrega inteligência de scouting de precisão directamente ao seu clube — identificando jogadores subvalorizados através de análise avançada xG, xA e per-90 antes do mercado os descobrir.",
+    btn_primary:"Solicitar relatório de scouting", btn_outline:"Os nossos serviços",
+    btn_sample:"Relatório de Exemplo",
+    svc_eyebrow:"O que fazemos",
+    svc_h2_1:"Inteligência", svc_h2_2:"a todos os níveis.",
+    svc_sub:"De talentos emergentes a jogadores estabelecidos, fornecemos aos clubes a vantagem baseada em dados para contratações confiantes.",
+    svc1_title:"Identificação de Talentos",
+    svc1_desc:"Identificamos jogadores cujo desempenho estatístico supera significativamente a sua avaliação de mercado — as estrelas de amanhã aos preços de hoje.",
+    svc2_title:"Análise Avançada",
+    svc2_desc:"Análise profunda de xG, xA, acções progressivas, métricas defensivas e mais — tudo comparado com as médias posicionais.",
+    svc3_title:"Relatórios para Clubes",
+    svc3_desc:"Relatórios PDF de scouting profissionais, adaptados à posição e orçamento específicos do seu clube.",
+    shw_eyebrow:"A nossa inteligência",
+    shw_quote:"O preço de mercado diz-lhe o que custa um jogador. Nós dizemos-lhe o que ele realmente vale.",
+    shw_body:"O nosso motor de pontuação proprietário analisa milhares de pontos de dados por jogador, normaliza o desempenho e entrega uma classificação clara dos jogadores mais subvalorizados em qualquer posição.",
+    shw_m1_label:"Métricas por jogador",
+    shw_m2_label:"Comparação justa",
+    shw_m3_label:"Prazo de entrega",
+    dlv_eyebrow:"Entregas",
+    dlv_h2_1:"O que o seu clube", dlv_h2_2:"recebe.",
+    dlv_sub:"Cada relatório é construído em torno dos seus critérios exactos — posição, faixa etária, orçamento e ligas-alvo.",
+    dlv1_title:"Lista Classificada", dlv1_desc:"Melhores candidatos classificados pelo nosso índice de subvalorização.",
+    dlv2_title:"Perfis de Jogadores", dlv2_desc:"Análises individuais, benchmarks posicionais e resumo de scouting gerado por IA.",
+    dlv3_title:"Relatório PDF", dlv3_desc:"Documento polido e pronto para apresentar ao director desportivo.",
+    dlv4_title:"Exportação de Dados Brutos", dlv4_desc:"Dataset CSV completo para análise interna adicional.",
+    cta_eyebrow:"Começar",
+    cta_h2_1:"Pronto para encontrar a sua", cta_h2_2:"próxima contratação?",
+    cta_sub:"Diga-nos a posição, orçamento e ligas-alvo. Nós tratamos do resto.",
+    cta_btn1:"Solicitar relatório", cta_btn2:"Saber mais",
+    con_eyebrow:"Entre em contacto",
+    con_h2:"Solicitar um<br><em>relatório de scouting</em>",
+    con_sub:"Diga-nos os seus requisitos de posição, intervalo de orçamento e ligas-alvo. Tratamos da análise e entregamos o relatório completo.",
+    con_d1_label:"O que incluir", con_d1_val:"Posição-alvo, faixa etária, orçamento máximo, ligas preferidas",
+    con_d2_label:"Prazo", con_d2_val:"Relatórios entregues em 48 horas",
+    con_d3_label:"Confidencial", con_d3_val:"Todos os pedidos tratados com total discrição",
+    lbl_name:"Nome completo", lbl_club:"Clube / Organização", lbl_email:"Email", lbl_phone:"Telefone",
+    lbl_position:"Posição-alvo", lbl_budget:"Orçamento máximo (€)",
+    lbl_leagues:"Ligas-alvo", lbl_message:"Requisitos adicionais",
+    ph_name:"O seu nome", ph_club:"FC Porto", ph_email:"voce@clube.pt",
+    ph_phone:"+351 900 000 000", ph_budget:"ex. 5.000.000",
+    ph_leagues:"ex. Liga NOS, La Liga",
+    ph_message:"Faixa etária, preferências de nacionalidade, estilo de jogo...",
+    pos_any:"Qualquer posição", pos_gk:"Guarda-Redes (GR)", pos_cb:"Defesa Central (DC)",
+    pos_lb:"Lateral Esquerdo (LE)", pos_rb:"Lateral Direito (LD)", pos_cdm:"Médio Defensivo (MD)",
+    pos_cm:"Médio Centro (MC)", pos_cam:"Médio Ofensivo (MO)",
+    pos_lw:"Extremo Esquerdo (EE)", pos_rw:"Extremo Direito (ED)", pos_st:"Avançado (AV)",
+    btn_send:"Enviar pedido",
+    footer_copy:"© 2025 ScoutIQ · Inteligência Futebolística de Elite · Todos os direitos reservados",
+    footer_privacy:"Política de Privacidade", footer_terms:"Termos e Condições",
+    consent_terms:"Aceito os <a href='https://example.com/terms' target='_blank'>Termos e Condições</a>",
+    consent_privacy:"Li e aceito a <a href='https://example.com/privacy' target='_blank'>Política de Privacidade</a>",
+    err_required:"Por favor, preencha todos os campos obrigatórios.",
+    err_email:"Por favor, insira um endereço de email válido.",
+    err_consent:"Por favor, aceite os Termos e Condições e a Política de Privacidade.",
+    msg_opening:"A abrir o seu cliente de email… Por favor envie a mensagem.",
+  },
+
+  it: {
+    _flag:"🇮🇹", _code:"IT", _dir:"ltr",
+    nav_services:"Servizi", nav_intelligence:"Intelligenza",
+    nav_deliverables:"Deliverable",
+    nav_contact:"Contatti", nav_cta:"Richiedi rapporto",
+    hero_eyebrow:"Intelligence Calcistica d'Elite",
+    hero_h1_1:"Scopri i talenti", hero_h1_2:"che gli altri si perdono.",
+    hero_tagline:"ScoutIQ consegna intelligence di scouting di precisione direttamente al tuo club — identificando giocatori sottovalutati attraverso analisi avanzata xG, xA e per-90 prima che il mercato li scopra.",
+    btn_primary:"Richiedi rapporto di scouting", btn_outline:"I nostri servizi",
+    btn_sample:"Report di Esempio",
+    svc_eyebrow:"Cosa facciamo",
+    svc_h2_1:"Intelligenza", svc_h2_2:"a ogni livello.",
+    svc_sub:"Da talenti emergenti a giocatori affermati, forniamo ai club il vantaggio basato sui dati per acquisti sicuri.",
+    svc1_title:"Identificazione dei Talenti",
+    svc1_desc:"Individuiamo giocatori il cui rendimento statistico supera significativamente la loro valutazione di mercato — le stelle di domani ai prezzi di oggi.",
+    svc2_title:"Analisi Avanzata",
+    svc2_desc:"Analisi approfondita di xG, xA, azioni progressive, metriche difensive e altro — tutto confrontato con le medie posizionali.",
+    svc3_title:"Rapporti per Club",
+    svc3_desc:"Rapporti PDF di scouting professionali, personalizzati per la posizione e il budget specifici del tuo club.",
+    shw_eyebrow:"La nostra intelligence",
+    shw_quote:"Il prezzo di mercato ti dice quanto costa un giocatore. Noi ti diciamo quanto vale davvero.",
+    shw_body:"Il nostro motore di scoring analizza migliaia di punti dati per giocatore, normalizza le prestazioni e fornisce una classifica chiara dei giocatori più sottovalutati in qualsiasi posizione.",
+    shw_m1_label:"Metriche per giocatore",
+    shw_m2_label:"Confronto equo",
+    shw_m3_label:"Tempi di consegna",
+    dlv_eyebrow:"Deliverable",
+    dlv_h2_1:"Cosa riceve", dlv_h2_2:"il tuo club.",
+    dlv_sub:"Ogni rapporto è costruito attorno ai tuoi criteri esatti — posizione, fascia d'età, budget e leghe target.",
+    dlv1_title:"Shortlist Classificata", dlv1_desc:"I migliori candidati classificati per il nostro punteggio di sottovalutazione.",
+    dlv2_title:"Profili Giocatori", dlv2_desc:"Analisi individuali, benchmark posizionali e riassunto di scouting generato dall'IA.",
+    dlv3_title:"Rapporto PDF", dlv3_desc:"Documento rifinito e pronto per essere presentato al direttore sportivo.",
+    dlv4_title:"Esportazione Dati Grezzi", dlv4_desc:"Dataset CSV completo per ulteriori analisi interne.",
+    cta_eyebrow:"Inizia ora",
+    cta_h2_1:"Pronto a trovare il tuo", cta_h2_2:"prossimo acquisto?",
+    cta_sub:"Dicci la posizione, il budget e le leghe target. Noi gestiamo tutto il resto.",
+    cta_btn1:"Richiedi rapporto", cta_btn2:"Scopri di più",
+    con_eyebrow:"Contattaci",
+    con_h2:"Richiedi un<br><em>rapporto di scouting</em>",
+    con_sub:"Dicci i tuoi requisiti di posizione, il budget e le leghe target. Ci occupiamo dell'analisi e consegniamo il rapporto completo.",
+    con_d1_label:"Cosa includere", con_d1_val:"Posizione target, fascia d'età, budget massimo, leghe preferite",
+    con_d2_label:"Tempi", con_d2_val:"Rapporti consegnati entro 48 ore",
+    con_d3_label:"Riservato", con_d3_val:"Tutte le richieste gestite con massima discrezione",
+    lbl_name:"Nome completo", lbl_club:"Club / Organizzazione", lbl_email:"Email", lbl_phone:"Telefono",
+    lbl_position:"Posizione target", lbl_budget:"Budget massimo (€)",
+    lbl_leagues:"Leghe target", lbl_message:"Requisiti aggiuntivi",
+    ph_name:"Il tuo nome", ph_club:"Juventus FC", ph_email:"tu@club.it",
+    ph_phone:"+39 300 000 0000", ph_budget:"es. 5.000.000",
+    ph_leagues:"es. Serie A, La Liga",
+    ph_message:"Fascia d'età, nazionalità, stile di gioco...",
+    pos_any:"Qualsiasi posizione", pos_gk:"Portiere (P)", pos_cb:"Difensore Centrale (DC)",
+    pos_lb:"Terzino Sinistro (TS)", pos_rb:"Terzino Destro (TD)", pos_cdm:"Centrocampista Difensivo (CDC)",
+    pos_cm:"Centrocampista (CC)", pos_cam:"Trequartista (TQ)",
+    pos_lw:"Ala Sinistra (AS)", pos_rw:"Ala Destra (AD)", pos_st:"Attaccante (ATT)",
+    btn_send:"Invia richiesta",
+    footer_copy:"© 2025 ScoutIQ · Intelligence Calcistica d'Elite · Tutti i diritti riservati",
+    footer_privacy:"Informativa sulla Privacy", footer_terms:"Termini e Condizioni",
+    consent_terms:"Accetto i <a href='https://example.com/terms' target='_blank'>Termini e Condizioni</a>",
+    consent_privacy:"Ho letto e accetto l'<a href='https://example.com/privacy' target='_blank'>Informativa sulla Privacy</a>",
+    err_required:"Si prega di compilare tutti i campi obbligatori.",
+    err_email:"Si prega di inserire un indirizzo email valido.",
+    err_consent:"Accetta i Termini e Condizioni e l'Informativa sulla Privacy per continuare.",
+    msg_opening:"Apertura del client email… Si prega di inviare il messaggio.",
+  },
+
+  nl: {
+    _flag:"🇳🇱", _code:"NL", _dir:"ltr",
+    nav_services:"Diensten", nav_intelligence:"Intelligentie",
+    nav_deliverables:"Deliverables",
+    nav_contact:"Contact", nav_cta:"Rapport aanvragen",
+    hero_eyebrow:"Elite Voetbalintelligentie",
+    hero_h1_1:"Ontdek talent", hero_h1_2:"dat anderen missen.",
+    hero_tagline:"ScoutIQ levert precisie scouting-intelligentie rechtstreeks aan uw club — ondergewaardeerde spelers identificeren via geavanceerde xG, xA en per-90 data-analyse voordat de markt het ontdekt.",
+    btn_primary:"Scoutingrapport aanvragen", btn_outline:"Onze diensten",
+    btn_sample:"Voorbeeldrapport",
+    svc_eyebrow:"Wat wij doen",
+    svc_h2_1:"Intelligentie", svc_h2_2:"op elk niveau.",
+    svc_sub:"Van opkomende talenten tot gevestigde spelers — wij geven clubs het datagedreven voordeel voor zelfverzekerde transfers.",
+    svc1_title:"Talentidentificatie",
+    svc1_desc:"Wij vinden spelers waarvan de statistische output hun marktwaarde significant overtreft — de sterren van morgen tegen de prijzen van vandaag.",
+    svc2_title:"Geavanceerde Analyse",
+    svc2_desc:"Diepgaande prestatie-analyse van xG, xA, progressieve acties, defensieve metrics en meer — allemaal vergeleken met positionele gemiddelden.",
+    svc3_title:"Clubklare Rapporten",
+    svc3_desc:"Professioneel geformatteerde PDF-scoutingrapporten en volledige data-exports, afgestemd op de specifieke positie en budget van uw club.",
+    shw_eyebrow:"Onze intelligentie",
+    shw_quote:"De marktprijs vertelt u wat een speler kost. Wij vertellen u wat een speler waard is.",
+    shw_body:"Ons scoresysteem analyseert duizenden datapunten per speler, normaliseert prestaties en levert een duidelijke ranking van de meest ondergewaardeerde spelers in elke positie.",
+    shw_m1_label:"Metrics per speler",
+    shw_m2_label:"Eerlijke vergelijking",
+    shw_m3_label:"Levertijd rapport",
+    dlv_eyebrow:"Deliverables",
+    dlv_h2_1:"Wat uw club", dlv_h2_2:"ontvangt.",
+    dlv_sub:"Elk rapport is opgebouwd rond uw exacte criteria — positie, leeftijdscategorie, budget en doelcompetities.",
+    dlv1_title:"Gerangschikte Shortlist", dlv1_desc:"Topkandidaten gerangschikt op basis van onze onderwaarderingsscore.",
+    dlv2_title:"Spelersprofielen", dlv2_desc:"Individuele analyses, positionele benchmarks en een AI-gegenereerde scouting-samenvatting.",
+    dlv3_title:"PDF-rapport", dlv3_desc:"Een verzorgd, presentatieklaar document dat uw technisch directeur direct kan gebruiken.",
+    dlv4_title:"Ruwe Data-export", dlv4_desc:"Volledig CSV-dataset voor clubs die verder intern onderzoek willen doen.",
+    cta_eyebrow:"Aan de slag",
+    cta_h2_1:"Klaar om uw volgende", cta_h2_2:"aankoop te vinden?",
+    cta_sub:"Vertel ons de positie, het budget en de doelcompetities. Wij doen de rest.",
+    cta_btn1:"Rapport aanvragen", cta_btn2:"Meer informatie",
+    con_eyebrow:"Neem contact op",
+    con_h2:"Vraag een<br><em>scoutingrapport</em> aan",
+    con_sub:"Vertel ons uw positievereisten, budgetbereik en doelcompetities. Wij verzorgen de analyse en leveren een volledig scoutingrapport.",
+    con_d1_label:"Wat op te nemen", con_d1_val:"Doelpositie, leeftijdscategorie, maximaal budget, voorkeurcompetities",
+    con_d2_label:"Levertijd", con_d2_val:"Rapporten geleverd binnen 48 uur",
+    con_d3_label:"Vertrouwelijk", con_d3_val:"Alle verzoeken behandeld met volledige discretie",
+    lbl_name:"Volledige naam", lbl_club:"Club / Organisatie", lbl_email:"E-mail", lbl_phone:"Telefoon",
+    lbl_position:"Doelpositie", lbl_budget:"Maximaal budget (€)",
+    lbl_leagues:"Doelcompetities", lbl_message:"Aanvullende vereisten",
+    ph_name:"Uw naam", ph_club:"Ajax Amsterdam", ph_email:"u@club.nl",
+    ph_phone:"+31 6 00 000 000", ph_budget:"bijv. 5.000.000",
+    ph_leagues:"bijv. Eredivisie, Bundesliga",
+    ph_message:"Leeftijdscategorie, nationaliteitsvoorkeur, speelstijl...",
+    pos_any:"Elke positie", pos_gk:"Keeper (K)", pos_cb:"Centrale Verdediger (CV)",
+    pos_lb:"Linksback (LB)", pos_rb:"Rechtsback (RB)", pos_cdm:"Defensieve Middenvelder (DM)",
+    pos_cm:"Centrale Middenvelder (CM)", pos_cam:"Aanvallende Middenvelder (AM)",
+    pos_lw:"Linksbuitenspeler (LW)", pos_rw:"Rechtsbuitenspeler (RW)", pos_st:"Spits (SP)",
+    btn_send:"Verzoek versturen",
+    footer_copy:"© 2025 ScoutIQ · Elite Voetbalintelligentie · Alle rechten voorbehouden",
+    footer_privacy:"Privacybeleid", footer_terms:"Algemene Voorwaarden",
+    consent_terms:"Ik ga akkoord met de <a href='https://example.com/terms' target='_blank'>Algemene Voorwaarden</a>",
+    consent_privacy:"Ik heb het <a href='https://example.com/privacy' target='_blank'>Privacybeleid</a> gelezen en accepteer dit",
+    err_required:"Vul alle verplichte velden in.",
+    err_email:"Voer een geldig e-mailadres in.",
+    err_consent:"Accepteer de Algemene Voorwaarden en het Privacybeleid om door te gaan.",
+    msg_opening:"Uw e-mailclient wordt geopend… Stuur het bericht.",
+  },
+
+  es: {
+    _flag:"🇪🇸", _code:"ES", _dir:"ltr",
+    nav_services:"Servicios", nav_intelligence:"Inteligencia",
+    nav_deliverables:"Entregables",
+    nav_contact:"Contacto", nav_cta:"Solicitar informe",
+    hero_eyebrow:"Inteligencia Futbolística de Elite",
+    hero_h1_1:"Descubre el talento", hero_h1_2:"que otros pasan por alto.",
+    hero_tagline:"ScoutIQ entrega inteligencia de scouting de precisión directamente a tu club — identificando jugadores infravalorados a través de análisis avanzado xG, xA y per-90 antes de que el mercado los descubra.",
+    btn_primary:"Solicitar informe de scouting", btn_outline:"Nuestros servicios",
+    btn_sample:"Informe de Muestra",
+    svc_eyebrow:"Lo que hacemos",
+    svc_h2_1:"Inteligencia", svc_h2_2:"a todos los niveles.",
+    svc_sub:"De talentos emergentes a jugadores establecidos, proporcionamos a los clubes la ventaja basada en datos para fichajes seguros.",
+    svc1_title:"Identificación de Talentos",
+    svc1_desc:"Encontramos jugadores cuyo rendimiento estadístico supera significativamente su valoración de mercado — las estrellas del mañana a los precios de hoy.",
+    svc2_title:"Análisis Avanzado",
+    svc2_desc:"Análisis profundo de xG, xA, acciones progresivas, métricas defensivas y más — todo comparado con promedios posicionales.",
+    svc3_title:"Informes para Clubes",
+    svc3_desc:"Informes PDF de scouting con formato profesional, adaptados a la posición y presupuesto específicos de tu club.",
+    shw_eyebrow:"Nuestra inteligencia",
+    shw_quote:"El precio de mercado te dice lo que cuesta un jugador. Nosotros te decimos lo que realmente vale.",
+    shw_body:"Nuestro motor de puntuación analiza miles de puntos de datos por jugador, normaliza el rendimiento y entrega una clasificación clara de los jugadores más infravalorados en cualquier posición.",
+    shw_m1_label:"Métricas por jugador",
+    shw_m2_label:"Comparación justa",
+    shw_m3_label:"Plazo de entrega",
+    dlv_eyebrow:"Entregables",
+    dlv_h2_1:"Lo que recibe", dlv_h2_2:"tu club.",
+    dlv_sub:"Cada informe se construye en torno a tus criterios exactos — posición, rango de edad, presupuesto y ligas objetivo.",
+    dlv1_title:"Lista Clasificada", dlv1_desc:"Mejores candidatos clasificados por nuestra puntuación de infravaloración.",
+    dlv2_title:"Perfiles de Jugadores", dlv2_desc:"Análisis individuales, benchmarks posicionales y resumen de scouting generado por IA.",
+    dlv3_title:"Informe PDF", dlv3_desc:"Documento pulido y listo para presentar al director deportivo.",
+    dlv4_title:"Exportación de Datos Brutos", dlv4_desc:"Dataset CSV completo para análisis interno adicional.",
+    cta_eyebrow:"Empezar",
+    cta_h2_1:"¿Listo para encontrar tu", cta_h2_2:"próximo fichaje?",
+    cta_sub:"Dinos la posición, presupuesto y ligas objetivo. Nosotros nos encargamos del resto.",
+    cta_btn1:"Solicitar informe", cta_btn2:"Saber más",
+    con_eyebrow:"Contactar",
+    con_h2:"Solicitar un<br><em>informe de scouting</em>",
+    con_sub:"Dinos tus requisitos de posición, rango de presupuesto y ligas objetivo. Nos encargamos del análisis y entregamos el informe completo.",
+    con_d1_label:"Qué incluir", con_d1_val:"Posición objetivo, rango de edad, presupuesto máximo, ligas preferidas",
+    con_d2_label:"Plazo", con_d2_val:"Informes entregados en 48 horas",
+    con_d3_label:"Confidencial", con_d3_val:"Todas las solicitudes tratadas con total discreción",
+    lbl_name:"Nombre completo", lbl_club:"Club / Organización", lbl_email:"Email", lbl_phone:"Teléfono",
+    lbl_position:"Posición objetivo", lbl_budget:"Presupuesto máximo (€)",
+    lbl_leagues:"Ligas objetivo", lbl_message:"Requisitos adicionales",
+    ph_name:"Tu nombre", ph_club:"FC Barcelona", ph_email:"tu@club.es",
+    ph_phone:"+34 600 000 000", ph_budget:"ej. 5.000.000",
+    ph_leagues:"ej. La Liga, Serie A",
+    ph_message:"Rango de edad, preferencias de nacionalidad, estilo de juego...",
+    pos_any:"Cualquier posición", pos_gk:"Portero (PO)", pos_cb:"Defensa Central (DC)",
+    pos_lb:"Lateral Izquierdo (LI)", pos_rb:"Lateral Derecho (LD)", pos_cdm:"Mediocentro Defensivo (MCD)",
+    pos_cm:"Mediocentro (MC)", pos_cam:"Mediapunta (MP)",
+    pos_lw:"Extremo Izquierdo (EI)", pos_rw:"Extremo Derecho (ED)", pos_st:"Delantero (DC)",
+    btn_send:"Enviar solicitud",
+    footer_copy:"© 2025 ScoutIQ · Inteligencia Futbolística de Elite · Todos los derechos reservados",
+    footer_privacy:"Política de Privacidad", footer_terms:"Términos y Condiciones",
+    consent_terms:"Acepto los <a href='https://example.com/terms' target='_blank'>Términos y Condiciones</a>",
+    consent_privacy:"He leído y acepto la <a href='https://example.com/privacy' target='_blank'>Política de Privacidad</a>",
+    err_required:"Por favor, rellena todos los campos obligatorios.",
+    err_email:"Por favor, introduce una dirección de email válida.",
+    err_consent:"Acepta los Términos y Condiciones y la Política de Privacidad para continuar.",
+    msg_opening:"Abriendo tu cliente de email… Por favor envía el mensaje.",
+  },
+
+  ar: {
+    _flag:"🇦🇪", _code:"AR", _dir:"rtl",
+    nav_services:"الخدمات", nav_intelligence:"الاستخبارات",
+    nav_deliverables:"المخرجات",
+    nav_contact:"تواصل", nav_cta:"طلب تقرير",
+    hero_eyebrow:"استخبارات كرة القدم النخبوية",
+    hero_h1_1:"اكتشف المواهب", hero_h1_2:"التي يفوّتها الآخرون.",
+    hero_tagline:"نقدم استخبارات الكشف الاحترافية مباشرة إلى ناديك — نكشف اللاعبين المقيَّمين بأقل من قيمتهم عبر تحليل بيانات متقدم قبل أن يدرك السوق ذلك.",
+    btn_primary:"طلب تقرير كشف", btn_outline:"خدماتنا",
+    btn_sample:"تقرير نموذجي",
+    svc_eyebrow:"ما نقدمه",
+    svc_h2_1:"استخبارات", svc_h2_2:"على كل المستويات.",
+    svc_sub:"من المواهب الناشئة إلى اللاعبين المحترفين، نوفر للأندية الميزة المبنية على البيانات لإتمام صفقات واثقة.",
+    svc1_title:"تحديد المواهب",
+    svc1_desc:"نكشف اللاعبين الذين يتجاوز أداؤهم الإحصائي قيمتهم السوقية بفارق كبير.",
+    svc2_title:"تحليلات متقدمة",
+    svc2_desc:"تحليل معمق لـ xG وxA والأفعال التقدمية والمؤشرات الدفاعية مقارنةً بمتوسطات المركز.",
+    svc3_title:"تقارير جاهزة للأندية",
+    svc3_desc:"تقارير كشف PDF احترافية، مصممة لمتطلبات المركز والميزانية.",
+    shw_eyebrow:"استخباراتنا",
+    shw_quote:"سعر السوق يخبرك بكلفة اللاعب. نحن نخبرك بقيمته الحقيقية.",
+    shw_body:"يحلل محرك التسجيل الخاص بنا آلاف نقاط البيانات لكل لاعب ويقدم ترتيباً واضحاً للاعبين الأقل تقييماً.",
+    shw_m1_label:"مؤشر لكل لاعب",
+    shw_m2_label:"مقارنة عادلة",
+    shw_m3_label:"مدة التسليم",
+    dlv_eyebrow:"المخرجات",
+    dlv_h2_1:"ما يحصل عليه", dlv_h2_2:"ناديك.",
+    dlv_sub:"كل تقرير مبني على معاييرك الدقيقة.",
+    dlv1_title:"قائمة مرتبة", dlv1_desc:"أفضل المرشحين مرتبين حسب نقاط التقييم المنخفض.",
+    dlv2_title:"ملفات اللاعبين", dlv2_desc:"تحليلات فردية وملخص كشف مُولَّد بالذكاء الاصطناعي.",
+    dlv3_title:"تقرير PDF", dlv3_desc:"مستند احترافي جاهز لتقديمه للمدير الرياضي.",
+    dlv4_title:"تصدير البيانات الخام", dlv4_desc:"مجموعة بيانات CSV كاملة لمزيد من التحليل الداخلي.",
+    cta_eyebrow:"ابدأ الآن",
+    cta_h2_1:"جاهز للعثور على", cta_h2_2:"صفقتك القادمة؟",
+    cta_sub:"أخبرنا بالمركز والميزانية والدوريات المستهدفة. نحن نتولى الباقي.",
+    cta_btn1:"طلب تقرير كشف", cta_btn2:"اعرف المزيد",
+    con_eyebrow:"تواصل معنا",
+    con_h2:"طلب<br><em>تقرير كشف</em>",
+    con_sub:"أخبرنا بمتطلبات المركز ونطاق الميزانية والدوريات المستهدفة. نتولى التحليل ونسلم التقرير الكامل.",
+    con_d1_label:"ما يجب تضمينه", con_d1_val:"المركز المستهدف، الفئة العمرية، الحد الأقصى للميزانية، الدوريات المفضلة",
+    con_d2_label:"مدة التسليم", con_d2_val:"تُسلَّم التقارير خلال 48 ساعة",
+    con_d3_label:"سري", con_d3_val:"جميع الطلبات تُعالَج بتكتم تام",
+    lbl_name:"الاسم الكامل", lbl_club:"النادي / المنظمة", lbl_email:"البريد الإلكتروني", lbl_phone:"الهاتف",
+    lbl_position:"المركز المستهدف", lbl_budget:"الحد الأقصى للميزانية (€)",
+    lbl_leagues:"الدوريات المستهدفة", lbl_message:"متطلبات إضافية",
+    ph_name:"اسمك", ph_club:"الهلال", ph_email:"you@club.com",
+    ph_phone:"+971 50 000 0000", ph_budget:"مثلاً 5,000,000",
+    ph_leagues:"مثلاً الدوري الإسباني، الدوري الإيطالي",
+    ph_message:"الفئة العمرية، الجنسية، أسلوب اللعب...",
+    pos_any:"أي مركز", pos_gk:"حارس مرمى", pos_cb:"مدافع وسط",
+    pos_lb:"ظهير أيسر", pos_rb:"ظهير أيمن", pos_cdm:"وسط دفاعي",
+    pos_cm:"وسط المركز", pos_cam:"وسط هجومي",
+    pos_lw:"جناح أيسر", pos_rw:"جناح أيمن", pos_st:"مهاجم",
+    btn_send:"إرسال الطلب",
+    footer_copy:"© 2025 ScoutIQ · استخبارات كرة القدم النخبوية · جميع الحقوق محفوظة",
+    footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام",
+    consent_terms:"أوافق على <a href='https://example.com/terms' target='_blank'>الشروط والأحكام</a>",
+    consent_privacy:"قرأت وأوافق على <a href='https://example.com/privacy' target='_blank'>سياسة الخصوصية</a>",
+    err_required:"يرجى ملء جميع الحقول المطلوبة.",
+    err_email:"يرجى إدخال عنوان بريد إلكتروني صحيح.",
+    err_consent:"يرجى قبول الشروط والأحكام وسياسة الخصوصية للمتابعة.",
+    msg_opening:"جارٍ فتح برنامج البريد الإلكتروني… يرجى إرسال الرسالة.",
+  },
+
+  ru: {
+    _flag:"🇷🇺", _code:"RU", _dir:"ltr",
+    nav_services:"Услуги", nav_intelligence:"Аналитика",
+    nav_deliverables:"Отчёты",
+    nav_contact:"Контакты", nav_cta:"Запросить отчёт",
+    hero_eyebrow:"Элитная футбольная аналитика",
+    hero_h1_1:"Найдите таланты,", hero_h1_2:"которые пропустили другие.",
+    hero_tagline:"ScoutIQ доставляет точную скаутинговую аналитику напрямую в ваш клуб — выявляя недооценённых игроков с помощью глубокого анализа xG, xA и per-90 данных раньше, чем это сделает рынок.",
+    btn_primary:"Запросить скаутинговый отчёт", btn_outline:"Наши услуги",
+    btn_sample:"Пример Отчёта",
+    svc_eyebrow:"Что мы делаем",
+    svc_h2_1:"Аналитика", svc_h2_2:"на каждом уровне.",
+    svc_sub:"От молодых талантов до опытных игроков — мы предоставляем клубам преимущество на основе данных для уверенных трансферов.",
+    svc1_title:"Выявление талантов",
+    svc1_desc:"Находим игроков, чьи статистические показатели значительно превышают их рыночную стоимость — звёзды завтра по ценам сегодня.",
+    svc2_title:"Продвинутая аналитика",
+    svc2_desc:"Глубокий анализ xG, xA, прогрессивных действий и оборонительных метрик в сравнении со средними показателями по позиции.",
+    svc3_title:"Отчёты для клубов",
+    svc3_desc:"Профессиональные PDF-отчёты, адаптированные под позицию и бюджет вашего клуба.",
+    shw_eyebrow:"Наша аналитика",
+    shw_quote:"Рыночная цена говорит, сколько стоит игрок. Мы говорим, сколько он стоит на самом деле.",
+    shw_body:"Наш алгоритм анализирует тысячи точек данных на каждого игрока, нормализует производительность и выдаёт чёткий рейтинг наиболее недооценённых игроков на любой позиции.",
+    shw_m1_label:"Метрик на игрока",
+    shw_m2_label:"Честное сравнение",
+    shw_m3_label:"Срок сдачи отчёта",
+    dlv_eyebrow:"Что вы получаете",
+    dlv_h2_1:"Что получит", dlv_h2_2:"ваш клуб.",
+    dlv_sub:"Каждый отчёт строится под ваши точные критерии — позиция, возраст, бюджет и целевые лиги.",
+    dlv1_title:"Ранжированный шортлист", dlv1_desc:"Лучшие кандидаты, ранжированные по индексу недооценённости.",
+    dlv2_title:"Профили игроков", dlv2_desc:"Индивидуальный анализ, позиционные бенчмарки и скаутинговое резюме от ИИ.",
+    dlv3_title:"PDF-отчёт", dlv3_desc:"Готовый к презентации документ для спортивного директора.",
+    dlv4_title:"Экспорт сырых данных", dlv4_desc:"Полный CSV-датасет для дополнительного внутреннего анализа.",
+    cta_eyebrow:"Начать",
+    cta_h2_1:"Готовы найти вашего", cta_h2_2:"следующего игрока?",
+    cta_sub:"Укажите позицию, бюджет и целевые лиги. Мы берём всё остальное на себя.",
+    cta_btn1:"Запросить отчёт", cta_btn2:"Узнать больше",
+    con_eyebrow:"Связаться с нами",
+    con_h2:"Запросить<br><em>скаутинговый отчёт</em>",
+    con_sub:"Укажите требования к позиции, диапазон бюджета и целевые лиги. Мы проведём анализ и доставим полный отчёт.",
+    con_d1_label:"Что указать", con_d1_val:"Позиция, возраст, максимальный бюджет, целевые лиги",
+    con_d2_label:"Срок", con_d2_val:"Отчёты доставляются в течение 48 часов",
+    con_d3_label:"Конфиденциально", con_d3_val:"Все запросы обрабатываются с полной конфиденциальностью",
+    lbl_name:"Полное имя", lbl_club:"Клуб / Организация", lbl_email:"Email", lbl_phone:"Телефон",
+    lbl_position:"Целевая позиция", lbl_budget:"Максимальный бюджет (€)",
+    lbl_leagues:"Целевые лиги", lbl_message:"Дополнительные требования",
+    ph_name:"Ваше имя", ph_club:"ФК Зенит", ph_email:"you@club.ru",
+    ph_phone:"+7 900 000 0000", ph_budget:"напр. 5 000 000",
+    ph_leagues:"напр. РПЛ, Бундеслига",
+    ph_message:"Возраст, гражданство, стиль игры...",
+    pos_any:"Любая позиция", pos_gk:"Вратарь (ВР)", pos_cb:"Центральный защитник (ЦЗ)",
+    pos_lb:"Левый защитник (ЛЗ)", pos_rb:"Правый защитник (ПЗ)", pos_cdm:"Опорный полузащитник (ОП)",
+    pos_cm:"Центральный полузащитник (ЦП)", pos_cam:"Атакующий полузащитник (АП)",
+    pos_lw:"Левый вингер (ЛВ)", pos_rw:"Правый вингер (ПВ)", pos_st:"Нападающий (НП)",
+    btn_send:"Отправить запрос",
+    footer_copy:"© 2025 ScoutIQ · Элитная футбольная аналитика · Все права защищены",
+    footer_privacy:"Политика конфиденциальности", footer_terms:"Условия использования",
+    consent_terms:"Я принимаю <a href='https://example.com/terms' target='_blank'>Условия использования</a>",
+    consent_privacy:"Я прочитал и принимаю <a href='https://example.com/privacy' target='_blank'>Политику конфиденциальности</a>",
+    err_required:"Пожалуйста, заполните все обязательные поля.",
+    err_email:"Пожалуйста, введите корректный адрес email.",
+    err_consent:"Пожалуйста, примите Условия использования и Политику конфиденциальности.",
+    msg_opening:"Открывается почтовый клиент… Пожалуйста, отправьте сообщение.",
+  },
+
+};
+
+// ── Language switcher ─────────────────────────────────────────────
+let currentLang = 'en';
+
+function toggleLangMenu() {
+  document.getElementById('langSwitcher').classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#langSwitcher')) {
+    document.getElementById('langSwitcher').classList.remove('open');
+  }
+});
+
+function setLang(code) {
+  if (!T[code]) return;
+  currentLang = code;
+  var t = T[code];
+
+  // Update html dir + lang
+  document.documentElement.lang = code;
+  document.documentElement.dir = t._dir || 'ltr';
+
+  // Update flag and code display
+  document.getElementById('currentFlag').textContent = t._flag;
+  document.getElementById('currentLangCode').textContent = t._code;
+
+  // Mark active option
+  document.querySelectorAll('.lang-option').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === code);
+  });
+
+  // Close dropdown
+  document.getElementById('langSwitcher').classList.remove('open');
+
+  // Apply all data-i18n translations
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) {
+      el.innerHTML = t[key];
+    }
+  });
+
+  // Apply placeholder translations
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-ph');
+    if (t[key] !== undefined) {
+      el.placeholder = t[key];
+    }
+  });
+
+  // Update select options
+  document.querySelectorAll('[data-i18n-opt]').forEach(function(opt) {
+    var key = opt.getAttribute('data-i18n-opt');
+    if (t[key] !== undefined) {
+      opt.textContent = t[key];
+    }
+  });
+
+  // RTL adjustments
+  if (code === 'ar') {
+    document.querySelector('nav').style.flexDirection = 'row-reverse';
+  } else {
+    document.querySelector('nav').style.flexDirection = '';
+  }
+}
+
+// ── Contact form ──────────────────────────────────────────────────
+var contactForm = document.getElementById('contactForm');
+var formStatus  = document.getElementById('formStatus');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var t = T[currentLang] || T.en;
+
+    var name     = document.getElementById('f-name').value.trim();
+    var club     = document.getElementById('f-club').value.trim();
+    var email    = document.getElementById('f-email').value.trim();
+    var position = document.getElementById('f-position').value;
+    var budget   = document.getElementById('f-budget').value.trim();
+    var leagues  = document.getElementById('f-leagues').value.trim();
+    var phone    = document.getElementById('f-phone').value.trim();
+    var message  = document.getElementById('f-message').value.trim();
+    var cbTerms  = document.getElementById('consent-terms');
+    var cbPriv   = document.getElementById('consent-privacy');
+
+    // Validation
+    if (!name || !club || !email) {
+      formStatus.className = 'form-status error';
+      formStatus.textContent = t.err_required;
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      formStatus.className = 'form-status error';
+      formStatus.textContent = t.err_email;
+      return;
+    }
+    if (!cbTerms.checked || !cbPriv.checked) {
+      formStatus.className = 'form-status error';
+      formStatus.textContent = t.err_consent;
+      if (!cbTerms.checked)  cbTerms.nextElementSibling.style.borderColor  = '#e05555';
+      if (!cbPriv.checked)   cbPriv.nextElementSibling.style.borderColor   = '#e05555';
+      setTimeout(function() {
+        cbTerms.nextElementSibling.style.borderColor = '';
+        cbPriv.nextElementSibling.style.borderColor  = '';
+      }, 2500);
+      return;
+    }
+
+    var subject = 'ScoutIQ Request — ' + (position || 'All positions') + ' — ' + club;
+    var body = [
+      'Name: ' + name,
+      'Club / Organisation: ' + club,
+      'Email: ' + email,
+      phone    ? 'Phone: ' + phone           : '',
+      '',
+      'Target Position: ' + (position || 'Any'),
+      budget   ? 'Max Budget: \u20ac' + budget : '',
+      leagues  ? 'Target Leagues: ' + leagues  : '',
+      message  ? '\nAdditional Requirements:\n' + message : '',
+    ].filter(Boolean).join('\n');
+
+    var btn = document.getElementById('contactSubmit');
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+
+    window.location.href = 'mailto:sklar.igor@gmail.com?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+    formStatus.className = 'form-status success';
+    formStatus.textContent = t.msg_opening;
+    contactForm.reset();
+    btn.disabled = false;
+    btn.style.opacity = '';
+  });
+}
+
+</script>
+
+</body>
+</html>
