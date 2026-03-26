@@ -498,12 +498,81 @@ footer{
   .showcase-inner{grid-template-columns:1fr;gap:48px;}
   .hero-right{display:none;}
 }
+
+/* ── Burger menu ── */
+.burger{
+  display:none;
+  flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;
+  background:transparent;border:none;cursor:pointer;
+  padding:6px;margin-left:12px;flex-shrink:0;
+}
+.burger span{
+  display:block;width:22px;height:1.5px;
+  background:var(--white2);
+  transition:all .3s;
+  transform-origin:center;
+}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* Mobile nav drawer */
+.mobile-nav{
+  display:none;
+  position:fixed;top:72px;left:0;right:0;
+  background:rgba(6,9,13,.97);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(201,168,76,.12);
+  z-index:199;
+  padding:24px clamp(24px,6vw,48px) 32px;
+  flex-direction:column;gap:0;
+}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{
+  font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--white2);text-decoration:none;
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  transition:color .2s;
+}
+.mobile-nav a:hover{color:var(--gold);}
+.mobile-nav .nav-cta-mobile{
+  margin-top:20px;
+  border:1px solid var(--gold);color:var(--gold) !important;
+  padding:14px 24px;border-radius:2px;text-align:center;
+  border-bottom:1px solid var(--gold) !important;
+}
+.mobile-nav .nav-cta-mobile:hover{background:var(--gold);color:var(--ink) !important;}
+
 @media(max-width:700px){
   .nav-links{display:none;}
+  .burger{display:flex;}
   .services-grid{grid-template-columns:1fr;}
-  .deliver-grid{grid-template-columns:1fr 1fr;}
+  .deliver-grid{grid-template-columns:1fr;}
   .divider{gap:16px;overflow-x:auto;}
-  .hero-h1{font-size:54px;}
+  .hero-h1{font-size:clamp(42px,12vw,64px);}
+  .hero-inner{grid-template-columns:1fr;padding-bottom:clamp(40px,8vh,80px);}
+  .hero-actions{flex-direction:column;gap:12px;}
+  .hero-actions a{text-align:center;}
+  .btn-primary,.btn-outline,.btn-sample{width:100%;justify-content:center;}
+  .metrics-row{gap:24px;}
+  .cta-actions{flex-direction:column;align-items:center;gap:12px;}
+  .cta-actions a{width:100%;max-width:320px;text-align:center;justify-content:center;}
+  .contact-layout{grid-template-columns:1fr;gap:40px;}
+  .form-grid-2{grid-template-columns:1fr;}
+  footer{flex-direction:column;align-items:center;text-align:center;gap:16px;}
+  .footer-right{flex-wrap:wrap;justify-content:center;gap:16px;}
+  .stat-pill{padding:12px 16px;}
+  .stat-pill-val{font-size:24px;}
+  .section-h2{font-size:clamp(32px,9vw,52px);}
+  .showcase-quote{font-size:clamp(22px,6vw,32px);}
+  .deliver-grid{grid-template-columns:1fr;}
+  .services-grid{grid-template-columns:1fr;}
+  .service-card{padding:36px 24px;}
+  .deliver-card{padding:32px 24px;}
+  .lang-btn{padding:6px 10px;}
+  nav{padding:0 16px;}
 }
 
 /* ══ LANG SWITCHER ═══════════════════════════════════════════════════════════ */
@@ -813,7 +882,20 @@ html[lang="ar"] select, html[lang="ar"] button {
       <button data-lang="ru" class="lang-option" onclick="setLang('ru')"  role="option">🇷🇺 Русский</button>
     </div>
   </div>
+
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#services" data-i18n="nav_services" onclick="closeMobileNav()">Services</a>
+  <a href="#showcase" data-i18n="nav_intelligence" onclick="closeMobileNav()">Intelligence</a>
+  <a href="#deliver" data-i18n="nav_deliverables" onclick="closeMobileNav()">Deliverables</a>
+  <a href="#contact" data-i18n="nav_contact" onclick="closeMobileNav()">Contact</a>
+  <a href="#contact" class="nav-cta-mobile" data-i18n="nav_cta" onclick="closeMobileNav()">Request a Report</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home" aria-label="Hero — ScoutIQ Football Intelligence">
@@ -965,7 +1047,7 @@ html[lang="ar"] select, html[lang="ar"] button {
     <p class="cta-sub reveal" data-i18n="cta_sub">Tell us your position, budget and target leagues.
 We handle everything else.</p>
     <div class="cta-actions reveal">
-      <a href="/cdn-cgi/l/email-protection#5625353923221625353923223f27783f39" class="btn-primary" data-i18n="cta_btn1">Request a Scouting Report</a>
+      <a href="#contact" class="btn-primary" data-i18n="cta_btn1">Request a Scouting Report</a>
       <a href="#services" class="btn-outline" data-i18n="cta_btn2">Learn More</a>
     </div>
   </div>
@@ -1110,9 +1192,71 @@ We handle everything else.</p>
   </div>
 </footer>
 
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=(mx-4)+'px'; cursor.style.top=(my-4)+'px'; });
+(function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=(rx-18)+'px'; ring.style.top=(ry-18)+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.transform='scale(1.8)';ring.style.borderColor='rgba(201,168,76,.7)';});
+  el.addEventListener('mouseleave',()=>{ring.style.transform='scale(1)';ring.style.borderColor='rgba(201,168,76,.4)';});
+});
+
+// Burger menu
+var burgerBtn = document.getElementById('burgerBtn');
+var mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){
+  burgerBtn.classList.remove('open');
+  mobileNav.classList.remove('open');
+  burgerBtn.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+if(burgerBtn){
+  burgerBtn.addEventListener('click',function(){
+    var isOpen = mobileNav.classList.toggle('open');
+    burgerBtn.classList.toggle('open');
+    burgerBtn.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+}
+// Close mobile nav on outside click
+document.addEventListener('click',function(e){
+  if(mobileNav && mobileNav.classList.contains('open')){
+    if(!e.target.closest('#mobileNav') && !e.target.closest('#burgerBtn')){
+      closeMobileNav();
+    }
+  }
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+  });
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach((el,i)=>{
+  el.style.transitionDelay=(i%4*0.1)+'s';
+  obs.observe(el);
+});
+
+// Nav active
+const sects=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sects.forEach(s=>{if(window.scrollY>=s.offsetTop-90)cur=s.id;});
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a=>{
+    a.style.color=a.getAttribute('href')==='#'+cur?'var(--gold)':'';
+  });
+},{passive:true});
+</script>
 
 <script>
-
 // ═══════════════════════════════════════════════════════════════════
 //  SCOUTIQ — Translation Engine v3 (full rewrite)
 //  EN / FR / PT / IT / NL / ES / AR / RU
@@ -1668,6 +1812,9 @@ function setLang(code) {
   // Close dropdown
   document.getElementById('langSwitcher').classList.remove('open');
 
+  // Close mobile nav on lang change
+  closeMobileNav();
+
   // Apply all data-i18n translations
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
@@ -1760,57 +1907,35 @@ if (contactForm) {
     btn.disabled = true;
     btn.style.opacity = '0.6';
 
-    window.location.href = 'mailto:sklar.igor@gmail.com?subject=' +
+    var mailtoLink = 'mailto:sklar.igor@gmail.com?subject=' +
       encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 
-    formStatus.className = 'form-status success';
-    formStatus.textContent = t.msg_opening || 'Opening your mail client… please send the message.';
+    var a = document.createElement('a');
+    a.href = mailtoLink;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ document.body.removeChild(a); }, 1000);
 
+    formStatus.className = 'form-status success';
+    formStatus.textContent = t.msg_opening;
     setTimeout(function() {
       btn.disabled = false;
-      btn.style.opacity = '1';
+      btn.style.opacity = '';
     }, 4000);
   });
 }
 
-
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=(mx-4)+'px'; cursor.style.top=(my-4)+'px'; });
-(function animRing(){
-  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-  ring.style.left=(rx-18)+'px'; ring.style.top=(ry-18)+'px';
-  requestAnimationFrame(animRing);
-})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.style.transform='scale(1.8)';ring.style.borderColor='rgba(201,168,76,.7)';});
-  el.addEventListener('mouseleave',()=>{ring.style.transform='scale(1)';ring.style.borderColor='rgba(201,168,76,.4)';});
-});
-
-// Scroll reveal
-const obs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+// Lang arrow rotate on open
+var langBtn = document.getElementById('langBtn');
+if (langBtn) {
+  var switcher = document.getElementById('langSwitcher');
+  var observer = new MutationObserver(function() {
+    var arrow = langBtn.querySelector('.lang-arrow');
+    if (arrow) arrow.style.transform = switcher.classList.contains('open') ? 'rotate(180deg)' : '';
   });
-},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal').forEach((el,i)=>{
-  el.style.transitionDelay=(i%4*0.1)+'s';
-  obs.observe(el);
-});
-
-// Nav active
-const sects=document.querySelectorAll('section[id]');
-window.addEventListener('scroll',()=>{
-  let cur='';
-  sects.forEach(s=>{if(window.scrollY>=s.offsetTop-90)cur=s.id;});
-  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a=>{
-    a.style.color=a.getAttribute('href')==='#'+cur?'var(--gold)':'';
-  });
-},{passive:true});
-
+  observer.observe(switcher, { attributes: true, attributeFilter: ['class'] });
+}
 </script>
-
 </body>
 </html>
