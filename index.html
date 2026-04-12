@@ -1184,7 +1184,7 @@ We handle everything else.</p>
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">scoutprix<sup>™</sup></div>
-  <div class="footer-copy" data-i18n="footer_copy">© 2025 scoutprix · Elite Football Intelligence · All rights reserved</div>
+  <div class="footer-copy" data-i18n="footer_copy">© <span id="footer-year"></span> scoutprix · Elite Football Intelligence · All rights reserved</div>
   <div class="footer-right">
     <a href="https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/" target="_blank" data-i18n="footer_privacy">Privacy Policy</a>
     <a href="https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/" target="_blank" data-i18n="footer_terms">Terms &amp; Conditions</a>
@@ -1318,7 +1318,7 @@ const T = {
     pos_cm:"Central Mid (CM)", pos_cam:"Attacking Mid (CAM)",
     pos_lw:"Left Wing (LW)", pos_rw:"Right Wing (RW)", pos_st:"Striker (ST)",
     btn_send:"Send Request",
-    footer_copy:"© 2025 scoutprix · Elite Football Intelligence · All rights reserved",
+    footer_copy:"© {year} scoutprix · Elite Football Intelligence · All rights reserved",
     footer_privacy:"Privacy Policy", footer_terms:"Terms & Conditions",
     consent_terms:"I agree to the <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Terms &amp; Conditions</a>",
     consent_privacy:"I have read and accept the <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Privacy Policy</a>",
@@ -1382,7 +1382,7 @@ const T = {
     pos_cm:"Milieu central (MC)", pos_cam:"Milieu offensif (MOff)",
     pos_lw:"Ailier gauche (AG)", pos_rw:"Ailier droit (AD)", pos_st:"Attaquant (ATT)",
     btn_send:"Envoyer la demande",
-    footer_copy:"© 2025 scoutprix · Intelligence Football Élite · Tous droits réservés",
+    footer_copy:"© {year} scoutprix · Intelligence Football Élite · Tous droits réservés",
     footer_privacy:"Politique de Confidentialité", footer_terms:"Conditions Générales",
     consent_terms:"J'accepte les <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Conditions Générales</a>",
     consent_privacy:"J'ai lu et j'accepte la <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Politique de Confidentialité</a>",
@@ -1446,7 +1446,7 @@ const T = {
     pos_cm:"Médio Centro (MC)", pos_cam:"Médio Ofensivo (MO)",
     pos_lw:"Extremo Esquerdo (EE)", pos_rw:"Extremo Direito (ED)", pos_st:"Avançado (AV)",
     btn_send:"Enviar pedido",
-    footer_copy:"© 2025 scoutprix · Inteligência Futebolística de Elite · Todos os direitos reservados",
+    footer_copy:"© {year} scoutprix · Inteligência Futebolística de Elite · Todos os direitos reservados",
     footer_privacy:"Política de Privacidade", footer_terms:"Termos e Condições",
     consent_terms:"Aceito os <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Termos e Condições</a>",
     consent_privacy:"Li e aceito a <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Política de Privacidade</a>",
@@ -1510,7 +1510,7 @@ const T = {
     pos_cm:"Centrocampista (CC)", pos_cam:"Trequartista (TQ)",
     pos_lw:"Ala Sinistra (AS)", pos_rw:"Ala Destra (AD)", pos_st:"Attaccante (ATT)",
     btn_send:"Invia richiesta",
-    footer_copy:"© 2025 scoutprix · Intelligence Calcistica d'Elite · Tutti i diritti riservati",
+    footer_copy:"© {year} scoutprix · Intelligence Calcistica d'Elite · Tutti i diritti riservati",
     footer_privacy:"Informativa sulla Privacy", footer_terms:"Termini e Condizioni",
     consent_terms:"Accetto i <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Termini e Condizioni</a>",
     consent_privacy:"Ho letto e accetto l'<a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Informativa sulla Privacy</a>",
@@ -1574,7 +1574,7 @@ const T = {
     pos_cm:"Centrale Middenvelder (CM)", pos_cam:"Aanvallende Middenvelder (AM)",
     pos_lw:"Linksbuitenspeler (LW)", pos_rw:"Rechtsbuitenspeler (RW)", pos_st:"Spits (SP)",
     btn_send:"Verzoek versturen",
-    footer_copy:"© 2025 scoutprix · Elite Voetbalintelligentie · Alle rechten voorbehouden",
+    footer_copy:"© {year} scoutprix · Elite Voetbalintelligentie · Alle rechten voorbehouden",
     footer_privacy:"Privacybeleid", footer_terms:"Algemene Voorwaarden",
     consent_terms:"Ik ga akkoord met de <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Algemene Voorwaarden</a>",
     consent_privacy:"Ik heb het <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Privacybeleid</a> gelezen en accepteer dit",
@@ -1638,7 +1638,7 @@ const T = {
     pos_cm:"Mediocentro (MC)", pos_cam:"Mediapunta (MP)",
     pos_lw:"Extremo Izquierdo (EI)", pos_rw:"Extremo Derecho (ED)", pos_st:"Delantero (DC)",
     btn_send:"Enviar solicitud",
-    footer_copy:"© 2025 scoutprix · Inteligencia Futbolística de Elite · Todos los derechos reservados",
+    footer_copy:"© {year} scoutprix · Inteligencia Futbolística de Elite · Todos los derechos reservados",
     footer_privacy:"Política de Privacidad", footer_terms:"Términos y Condiciones",
     consent_terms:"Acepto los <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Términos y Condiciones</a>",
     consent_privacy:"He leído y acepto la <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Política de Privacidad</a>",
@@ -1702,7 +1702,7 @@ const T = {
     pos_cm:"وسط المركز", pos_cam:"وسط هجومي",
     pos_lw:"جناح أيسر", pos_rw:"جناح أيمن", pos_st:"مهاجم",
     btn_send:"إرسال الطلب",
-    footer_copy:"© 2025 scoutprix · استخبارات كرة القدم النخبوية · جميع الحقوق محفوظة",
+    footer_copy:"© {year} scoutprix · استخبارات كرة القدم النخبوية · جميع الحقوق محفوظة",
     footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام",
     consent_terms:"أوافق على <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>الشروط والأحكام</a>",
     consent_privacy:"قرأت وأوافق على <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>سياسة الخصوصية</a>",
@@ -1766,7 +1766,7 @@ const T = {
     pos_cm:"Центральный полузащитник (ЦП)", pos_cam:"Атакующий полузащитник (АП)",
     pos_lw:"Левый вингер (ЛВ)", pos_rw:"Правый вингер (ПВ)", pos_st:"Нападающий (НП)",
     btn_send:"Отправить запрос",
-    footer_copy:"© 2025 scoutprix · Элитная футбольная аналитика · Все права защищены",
+    footer_copy:"© {year} scoutprix · Элитная футбольная аналитика · Все права защищены",
     footer_privacy:"Политика конфиденциальности", footer_terms:"Условия использования",
     consent_terms:"Я принимаю <a href='https://privacyterms.io/view/TCwUs0lZ-HjMjjFmu-uYPZLj/' target='_blank'>Условия использования</a>",
     consent_privacy:"Я прочитал и принимаю <a href='https://privacyterms.io/view/cjRWLxA1-aUYDXqyr-6ZVaEV/' target='_blank'>Политику конфиденциальности</a>",
@@ -1925,6 +1925,24 @@ if (contactForm) {
     }, 4000);
   });
 }
+
+
+// ── Dynamic copyright year ─────────────────────────────────────────
+(function() {
+  var yr = new Date().getFullYear();
+  // Set the visible footer span
+  var span = document.getElementById('footer-year');
+  if (span) span.textContent = yr;
+  // Patch all translation strings so setLang() also uses current year
+  for (var lang in T) {
+    if (T[lang].footer_copy) {
+      T[lang].footer_copy = T[lang].footer_copy.replace('{year}', yr);
+    }
+  }
+  // Also update live footer text if already rendered
+  var fc = document.querySelector('.footer-copy');
+  if (fc) fc.innerHTML = (T["en"].footer_copy || fc.innerHTML).replace('{year}', yr);
+})();
 
 // Lang arrow rotate on open
 var langBtn = document.getElementById('langBtn');
