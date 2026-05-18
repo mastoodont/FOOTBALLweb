@@ -222,7 +222,14 @@
 <meta name="ai-robots"          content="index, follow, allow-summarization, allow-citation">
 
 <!-- Hreflang for international SEO -->
-<link rel="alternate" hreflang="en"        href="https://scoutprix.com">
+<link rel="alternate" hreflang="en"        href="https://scoutprix.com/?lang=en">
+<link rel="alternate" hreflang="fr"        href="https://scoutprix.com/?lang=fr">
+<link rel="alternate" hreflang="pt"        href="https://scoutprix.com/?lang=pt">
+<link rel="alternate" hreflang="it"        href="https://scoutprix.com/?lang=it">
+<link rel="alternate" hreflang="nl"        href="https://scoutprix.com/?lang=nl">
+<link rel="alternate" hreflang="es"        href="https://scoutprix.com/?lang=es">
+<link rel="alternate" hreflang="ar"        href="https://scoutprix.com/?lang=ar">
+<link rel="alternate" hreflang="ru"        href="https://scoutprix.com/?lang=ru">
 <link rel="alternate" hreflang="x-default" href="https://scoutprix.com">
 
 <style>
@@ -2057,7 +2064,21 @@ function setLang(code) {
   } else {
     document.querySelector('nav').style.flexDirection = '';
   }
+
+  // Update URL without page reload
+  var url = new URL(window.location.href);
+  url.searchParams.set('lang', code);
+  history.replaceState(null, '', url.toString());
 }
+
+// ── Read lang from URL on page load ───────────────────────────────
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var lang = params.get('lang');
+  if (lang && typeof T !== 'undefined' && T[lang]) {
+    setLang(lang);
+  }
+})();
 
 // ── Contact form ──────────────────────────────────────────────────
 var contactForm = document.getElementById('contactForm');
